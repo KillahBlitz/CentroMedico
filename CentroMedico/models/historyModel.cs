@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CentroMedico.models
 {
-    internal class historyModel
+    public class historyModel
     {
         public int id { get; set; }
         [Key]

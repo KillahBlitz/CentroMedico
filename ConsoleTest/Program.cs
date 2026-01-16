@@ -13,6 +13,7 @@ namespace ConsoleTest
             {
                 principalPresenter.initDataBase();
                 Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("hello World");
                 Console.WriteLine("Database initialized successfully.");
             }
             catch (Exception ex)

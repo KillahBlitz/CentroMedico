@@ -17,9 +17,9 @@ namespace CentroMedico.models
         public string type_patient { get; set; }
         public float weight { get; set; }
         public float height { get; set; }
-        public int total_consultations { get; set; }
+        public int total_consulation { get; set; }
         public DateTime birthdate { get; set; }
         public string apgar { get; set; }
-        public string blood_type { get; set; }
+        public string? blood_type { get; set; }
     }
 }

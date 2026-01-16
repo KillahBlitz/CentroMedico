@@ -11,7 +11,7 @@ namespace CentroMedico.models
     public class historyModel
     {
         public int id { get; set; }
-        [Key]
+        public int patient_id { get; set; }
         public string name { get; set; }
         public string history { get; set; }
         public string type_history { get; set; }

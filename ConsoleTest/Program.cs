@@ -44,6 +44,24 @@ namespace ConsoleTest
                     // 4. (Opcional) CONTEO RAPIDO
                     var total = db.Patients.Count();
                     Console.WriteLine($"\nTotal de registros en la tabla Patients: {total}");
+
+                    //consultar la tabla de consulations
+                    Console.WriteLine("\n--- Listado Actual de Consultas en DB ---");
+                    var listaConsultas = db.Consulations.ToList();
+                    if (listaConsultas.Count > 0)
+                    {
+                        foreach (var c in listaConsultas)
+                        {
+                            Console.WriteLine($"ID: {c.id} | Fecha: {c.date} | Motivo: {c.observations}");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("No se encontraron consultas.");
+                    }
+
+                    var total2 = db.Consulations.Count();
+                    Console.WriteLine($"\nTotal de registros en la tabla Consultations: {total2}");
                 }
             }
             catch (Exception ex)

@@ -11,8 +11,8 @@ namespace CentroMedico.models
     public class consulationModel
     {
         public int id { get; set; }
-        [Key]
-        public string name { get; set; }
+        [Required]
+        public int patient_id { get; set; }
         public DateTime date { get; set; }
         public float weight { get; set; }
         public float height { get; set; }

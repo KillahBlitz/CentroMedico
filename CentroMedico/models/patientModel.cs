@@ -10,8 +10,9 @@ namespace CentroMedico.models
 {
     public class patientModel
     {
-        public int id { get; set; }
         [Key]
+        public int id { get; set; }
+        [Required]
         public string name { get; set; }
         public string age { get; set; }
         public string type_patient { get; set; }
@@ -20,6 +21,6 @@ namespace CentroMedico.models
         public int total_consulation { get; set; }
         public DateTime birthdate { get; set; }
         public string apgar { get; set; }
-        public string? blood_type { get; set; }
+        public string blood_type { get; set; }
     }
 }

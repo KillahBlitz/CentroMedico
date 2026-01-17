@@ -126,6 +126,7 @@ namespace CentroMedico.viewers
         private void openRegisterModal(object sender, RoutedEventArgs e)
         {
             CreatePatientViewer modal = new CreatePatientViewer();
+            modal.PatientCreated += (s, args) => ChargeData();
             modal.ShowDialog();
         }
     }

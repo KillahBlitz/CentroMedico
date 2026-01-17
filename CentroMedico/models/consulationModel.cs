@@ -10,6 +10,7 @@ namespace CentroMedico.models
 {
     public class consulationModel
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int id { get; set; }
         [Required]
         public int patient_id { get; set; }

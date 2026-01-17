@@ -10,11 +10,12 @@ namespace CentroMedico.models
 {
     public class historyModel
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int id { get; set; }
         public int patient_id { get; set; }
         public string name { get; set; }
         public string history { get; set; }
-        public string type_history { get; set; }
+        public string type_history { get; set; } = "Indefinido";
 
     }
 }

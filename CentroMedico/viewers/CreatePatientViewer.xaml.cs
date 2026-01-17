@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions; // <--- IMPORTANTE: Agregué esto para que funcione el Regex
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,20 +12,22 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using CentroMedico.Database;
+using CentroMedico.models;
 
 namespace CentroMedico.viewers
 {
     public partial class CreatePatientViewer : Window
     {
+        public event EventHandler PatientCreated;
+
         public CreatePatientViewer()
         {
             InitializeComponent();
         }
 
-        // Función para validar que solo se escriban números y un solo punto decimal
         private void OnlyNumbers_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            // 1. Si el caracter NO es un número o un punto, bloquéalo
             Regex regex = new Regex("[^0-9.]+");
             if (regex.IsMatch(e.Text))
             {
@@ -33,7 +35,6 @@ namespace CentroMedico.viewers
                 return;
             }
 
-            // 2. Si es un punto, revisa que no haya otro punto ya escrito
             if (e.Text == "." && ((TextBox)sender).Text.Contains("."))
             {
                 e.Handled = true;
@@ -47,28 +48,62 @@ namespace CentroMedico.viewers
 
         private void saveData(object sender, RoutedEventArgs e)
         {
-            // Nota: Para obtener el texto de los ComboBox (Sangre/Apgar) 
-            // necesitarás acceder a su SelectedItem o Text dependiendo de cómo lo quieras guardar.
-            // Por ahora mantengo tu lógica original de inputs de texto.
-
             string patientName = fullNameInput.Text;
             string typePatient = patientTypeInput.Text;
             string weight = weightInput.Text;
             string height = heightInput.Text;
             string history = historyInput.Text;
-
-            // Para el ComboBox de sangre, obtenemos el texto del item seleccionado
+            string apgar_left = apgar1Input.Text;
+            string apgar_right = apgar5Input.Text;
             string BloodType = bloodTypeInput.Text;
 
-            DateOnly? birthdate = dobInput.SelectedDate.HasValue ? DateOnly.FromDateTime(dobInput.SelectedDate.Value) : null;
+            DateTime? birthdate = dobInput.SelectedDate.HasValue ? dobInput.SelectedDate.Value : (DateTime?)null;
+            typePatient = string.IsNullOrEmpty(typePatient) ? "General" : typePatient;
 
-            ChampsValidation(patientName, weight, height, BloodType, birthdate);
+            bool validation = ChampsValidation(patientName, weight, height, birthdate);
+
+            if (validation)
+            {
+                using (var db = new ConsultorioContext())
+                {
+                    var newPatient = new patientModel
+                    {
+                        name = patientName,
+                        type_patient = typePatient,
+                        weight = float.Parse(weight),
+                        height = float.Parse(height),
+                        blood_type = BloodType,
+                        birthdate = birthdate.Value,
+                        apgar = $"{apgar_left} de {apgar_right}",
+                    };
+                    db.Patients.Add(newPatient);
+                    db.SaveChanges();
+
+                    if (!string.IsNullOrEmpty(history))
+                    {
+                        var newHistory = new historyModel
+                        {
+                            patient_id = newPatient.id,
+                            history = history,
+                            name = newPatient.name,
+                        };
+                        db.Histories.Add(newHistory);
+                        db.SaveChanges();
+                    }
+                }
+                MessageBox.Show("Paciente creado exitosamente.");
+                PatientCreated?.Invoke(this, EventArgs.Empty);
+                this.Close();
+            }
+            else
+            {
+                return;
+            }
         }
 
-        public static void ChampsValidation(string name, string weight, string height, string bloodType, DateOnly? birthDate)
+        public static bool ChampsValidation(string name, string weight, string height, DateTime? birthDate)
         {
-            // MessageBox.Show("Validando campos..."); // Puedes comentar esto si es molesto
-
+            bool validation = false;
             if (string.IsNullOrEmpty(name))
             {
                 MessageBox.Show("El campo de nombre es obligatorio.");
@@ -80,27 +115,22 @@ namespace CentroMedico.viewers
             else if (string.IsNullOrEmpty(height))
             {
                 MessageBox.Show("El campo de altura es obligatorio.");
-            }
-            
-            else if (string.IsNullOrEmpty(bloodType) || bloodType == "Por definir")
-            {
-                MessageBox.Show("El campo de tipo de sangre es obligatorio o debe ser definido.");
-            }
+            } 
             else if (birthDate == null)
             {
                 MessageBox.Show("El campo de fecha de nacimiento es obligatorio.");
             }
             else
             {
-             
-                MessageBox.Show("¡Validación exitosa! Guardando datos...");
-              
+                validation = true;
             }
+            return validation;
         }
-
         private void fullNameInput_TextChanged(object sender, TextChangedEventArgs e)
         {
-
+            fullNameInput.Text = fullNameInput.Text.ToUpper();
+            fullNameInput.SelectionStart = fullNameInput.Text.Length;
         }
+
     }
 }

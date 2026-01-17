@@ -17,7 +17,7 @@ namespace CentroMedico.models
         public string name { get; set; }
         public int age { get; set; }
         public int age_mounth { get; set; }
-        public string type_patient { get; set; } = "N/A";
+        public string type_patient { get; set; } = "General";
         public float weight { get; set; }
         public float height { get; set; }
         public int total_consulation { get; set; }

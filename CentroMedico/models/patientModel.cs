@@ -11,11 +11,12 @@ namespace CentroMedico.models
     public class patientModel
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int id { get; set; }
         [Required]
         public string name { get; set; }
         public string age { get; set; }
-        public string type_patient { get; set; }
+        public string type_patient { get; set; } = "N/A";
         public float weight { get; set; }
         public float height { get; set; }
         public int total_consulation { get; set; }

@@ -137,14 +137,15 @@
                                 </TextBlock.Style>
                             </TextBlock>
                         </Grid>
-
                         <Button Grid.Column="2" 
-                                Style="{StaticResource BotonPrimario}">
+                                Style="{StaticResource BotonPrimario}"
+                                Click="openRegisterModal">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="+" Margin="0,0,8,0" FontSize="16" FontWeight="Bold"/>
                                 <TextBlock Text="Nuevo Paciente"/>
                             </StackPanel>
                         </Button>
+
                     </Grid>
 
                     <ListView Grid.Row="1" x:Name="PatientsList" 

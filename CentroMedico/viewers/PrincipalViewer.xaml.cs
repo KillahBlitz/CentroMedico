@@ -108,6 +108,11 @@ namespace CentroMedico.viewers
                 return ultimateConsulation != null ? DateOnly.FromDateTime(ultimateConsulation.date) : DateOnly.FromDateTime(DateTime.Now);
             }
         }
+        private void openRegisterModal(object sender, RoutedEventArgs e)
+        {
+            CreatePatientViewer modal = new CreatePatientViewer();
+            modal.ShowDialog();
+        }
     }
 }
 

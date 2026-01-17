@@ -84,13 +84,18 @@ namespace CentroMedico.viewers
             {
                 int birthYear = patient.birthdate.Year;
                 int age = currentYear - birthYear;
-                patient.age = age.ToString();
+                patient.age = age;
+                int birthMonth = patient.birthdate.Month;
+                int currentMonth = DateTime.Now.Month;
+                int monthsOld = birthMonth - currentMonth;
+                patient.age_mounth = monthsOld;
                 using (var db = new ConsultorioContext())
                 {
                     var patientToUpdate = db.Patients.Find(patient.id);
                     if (patientToUpdate != null)
                     {
                         patientToUpdate.age = patient.age;
+                        patientToUpdate.age_mounth = patient.age_mounth;
                         db.SaveChanges();
                     }
                 }

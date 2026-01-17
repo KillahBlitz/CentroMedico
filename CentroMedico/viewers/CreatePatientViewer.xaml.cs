@@ -26,15 +26,43 @@ namespace CentroMedico.viewers
             this.Close();
         }
 
-
         private void saveData(object sender, RoutedEventArgs e)
         {
-
             string patientName = fullNameInput.Text;
+            string typePatient = patientTypeInput.Text;
+            string weight = weightInput.Text;
+            string height = heightInput.Text;
+            string history = historyInput.Text;
+            string BloodType = bloodTypeInput.Text;
 
-            MessageBox.Show($"Saving patient: {patientName}...");
+            DateOnly? birthdate = dobInput.SelectedDate.HasValue ? DateOnly.FromDateTime(dobInput.SelectedDate.Value) : null;
 
-            this.Close();
+            ChampsValidation(patientName, weight, height, BloodType, birthdate);
+        }
+
+        public static void ChampsValidation(string name, string weight, string height, string bloodType, DateOnly? birthDate)
+        {
+            MessageBox.Show("Validando campos...");
+            if (string.IsNullOrEmpty(name))
+            {
+                MessageBox.Show("El campo de nombre es obligatorio.");
+            }
+            else if (string.IsNullOrEmpty(weight))
+            {
+                MessageBox.Show("El campo de peso es obligatorio.");
+            }
+            else if (string.IsNullOrEmpty(height))
+            {
+                MessageBox.Show("El campo de altura es obligatorio.");
+            }
+            else if (string.IsNullOrEmpty(bloodType))
+            {
+                MessageBox.Show("El campo de tipo de sangre es obligatorio.");
+            }
+            else if (birthDate == null)
+            {
+                MessageBox.Show("El campo de fecha de nacimiento es obligatorio.");
+            }
         }
     }
 }

@@ -22,28 +22,30 @@ namespace CentroMedico.viewers
     public partial class principalViewer : UserControl
     {
      
-        private List<patientModel> _todosLosPacientes;
+        private List<patientModel> _allPatients;
 
         public principalViewer()
         {
             InitializeComponent();
-
-            ConsultorioContext.PrepararBaseDeDatos();
-
-            CargarDatos();
+            ConsultorioContext.PrepareDatBase();
+            ChargeData();
         }
 
-        private void CargarDatos()
+        private void ChargeData()
         {
             try
             {
                 using (var db = new ConsultorioContext())
                 {
-     
-                    _todosLosPacientes = db.Patients.ToList();
+                    _allPatients = db.Patients.ToList();
                 }
-
-                listaPacientes.ItemsSource = _todosLosPacientes;
+                _allPatients = OrderByName(_allPatients);
+                foreach (var patient in _allPatients)
+                {
+                    patient.ultimateDate = SelectUltimateConsulation(patient.id);
+                }
+                PatientsList.ItemsSource = _allPatients;
+                UpdateYearsOld();
             }
             catch (Exception ex)
             {
@@ -51,28 +53,61 @@ namespace CentroMedico.viewers
             }
         }
 
-        private void txtBuscar_TextChanged(object sender, TextChangedEventArgs e)
+        private void searchUser(object sender, TextChangedEventArgs e)
         {
-  
-            if (_todosLosPacientes == null) return;
-
-
-            string textoBusqueda = txtBuscar.Text.ToLower();
-
-
-            if (string.IsNullOrEmpty(textoBusqueda))
+            if (_allPatients == null) return;
+            
+            string searchText = txtBuscar.Text.ToLower();
+            
+            if (string.IsNullOrEmpty(searchText))
             {
-                listaPacientes.ItemsSource = _todosLosPacientes;
+                PatientsList.ItemsSource = _allPatients;
                 return;
             }
-
-            var listaFiltrada = _todosLosPacientes
-                                .Where(paciente => paciente.name != null &&
-                                                   paciente.name.ToLower().Contains(textoBusqueda))
-                                .ToList();
-
-            listaPacientes.ItemsSource = listaFiltrada;
+            
+            var filteredPatients = _allPatients
+                .Where(p => p.name.ToLower().Contains(searchText) || p.id.ToString().Contains(searchText))
+                .ToList();
+            PatientsList.ItemsSource = filteredPatients;
         }
 
+        public static List<patientModel> OrderByName(List<patientModel> patients)
+        {
+            patients.Sort((x, y) => string.Compare(x.name, y.name));
+            return patients;
+        }
+
+        private void UpdateYearsOld()
+        {
+            int currentYear = DateTime.Now.Year;
+            foreach (var patient in _allPatients)
+            {
+                int birthYear = patient.birthdate.Year;
+                int age = currentYear - birthYear;
+                patient.age = age.ToString();
+                using (var db = new ConsultorioContext())
+                {
+                    var patientToUpdate = db.Patients.Find(patient.id);
+                    if (patientToUpdate != null)
+                    {
+                        patientToUpdate.age = patient.age;
+                        db.SaveChanges();
+                    }
+                }
+            }
+        }
+
+        private DateOnly SelectUltimateConsulation(int patientId)
+        {
+            using (var db = new ConsultorioContext())
+            {
+                var ultimateConsulation = db.Consulations
+                                            .Where(c => c.patient_id == patientId)
+                                            .OrderByDescending(c => c.date)
+                                            .FirstOrDefault();
+                return ultimateConsulation != null ? DateOnly.FromDateTime(ultimateConsulation.date) : DateOnly.FromDateTime(DateTime.Now);
+            }
+        }
     }
 }
+

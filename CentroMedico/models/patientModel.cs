@@ -22,5 +22,8 @@ namespace CentroMedico.models
         public DateTime birthdate { get; set; }
         public string apgar { get; set; }
         public string blood_type { get; set; }
+        
+        [NotMapped]
+        public DateOnly? ultimateDate { get; set; }
     }
 }

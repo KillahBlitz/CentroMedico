@@ -115,6 +115,7 @@
                         <Grid Grid.Column="1" Width="300" Margin="0,0,20,0" VerticalAlignment="Center">
                             <TextBox Style="{StaticResource CajaBusqueda}" 
                                      x:Name="txtBuscar"
+                                     TextChanged="searchUser"
                                      VerticalContentAlignment="Center"
                                      Padding="35,10,10,10"/>
 
@@ -146,7 +147,7 @@
                         </Button>
                     </Grid>
 
-                    <ListView Grid.Row="1" x:Name="listaPacientes" 
+                    <ListView Grid.Row="1" x:Name="PatientsList" 
           BorderThickness="0" Background="Transparent"
           ScrollViewer.HorizontalScrollBarVisibility="Disabled">
 
@@ -196,8 +197,8 @@
                                             <TextBlock Text="Total Consultas: " Foreground="#6B7280" FontSize="13"/>
                                             <TextBlock Text="{Binding total_consulation}" Foreground="#6B7280" FontSize="13" FontWeight="Bold" Margin="0,0,15,0"/>
 
-                                            <TextBlock Text="Última Visita:" Foreground="#6B7280" FontSize="13"/>
-                                            <TextBlock Text="{Binding UltimaFecha}" Foreground="#6B7280" FontSize="13"/>
+                                            <TextBlock Text="Última Visita: " Foreground="#6B7280" FontSize="13"/>
+                                            <TextBlock Text="{Binding ultimateDate}" Foreground="#6B7280" FontSize="13"/>
                                         </StackPanel>
                                     </StackPanel>
 

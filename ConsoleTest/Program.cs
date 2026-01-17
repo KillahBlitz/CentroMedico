@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using CentroMedico.models;
-using CentroMedico.presenters;
 
 namespace ConsoleTest
 {
@@ -11,7 +10,6 @@ namespace ConsoleTest
         {
             try
             {
-                principalPresenter.initDataBase();
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("hello World");
                 Console.WriteLine("Database initialized successfully.");

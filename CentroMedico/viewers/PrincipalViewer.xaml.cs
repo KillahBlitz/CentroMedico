@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq; 
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -18,10 +18,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CentroMedico.viewers
 {
-
     public partial class principalViewer : UserControl
     {
-     
         private List<patientModel> _allPatients;
 
         public principalViewer()
@@ -29,6 +27,17 @@ namespace CentroMedico.viewers
             InitializeComponent();
             ConsultorioContext.PrepareDatBase();
             ChargeData();
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+      
+            Window parentWindow = Window.GetWindow(this);
+
+            if (parentWindow != null)
+            {
+                parentWindow.WindowState = WindowState.Maximized;
+            }
         }
 
         private void ChargeData()
@@ -56,15 +65,15 @@ namespace CentroMedico.viewers
         private void searchUser(object sender, TextChangedEventArgs e)
         {
             if (_allPatients == null) return;
-            
+
             string searchText = txtBuscar.Text.ToLower();
-            
+
             if (string.IsNullOrEmpty(searchText))
             {
                 PatientsList.ItemsSource = _allPatients;
                 return;
             }
-            
+
             var filteredPatients = _allPatients
                 .Where(p => p.name.ToLower().Contains(searchText) || p.id.ToString().Contains(searchText))
                 .ToList();
@@ -113,6 +122,7 @@ namespace CentroMedico.viewers
                 return ultimateConsulation != null ? DateOnly.FromDateTime(ultimateConsulation.date) : DateOnly.FromDateTime(DateTime.Now);
             }
         }
+
         private void openRegisterModal(object sender, RoutedEventArgs e)
         {
             CreatePatientViewer modal = new CreatePatientViewer();
@@ -120,4 +130,3 @@ namespace CentroMedico.viewers
         }
     }
 }
-

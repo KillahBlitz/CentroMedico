@@ -5,7 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="700" d:DesignWidth="1000"
-             Background="#F3F4F6" FontFamily="Segoe UI">
+             Background="#F3F4F6" FontFamily="Segoe UI"
+             Loaded="UserControl_Loaded">
 
     <UserControl.Resources>
         <SolidColorBrush x:Key="PrimaryColor" Color="#2563EB"/>

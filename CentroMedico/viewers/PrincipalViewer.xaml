@@ -156,6 +156,7 @@
 
                         <ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem">
+                                <Setter Property="Cursor" Value="Hand"/>
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                                 <Setter Property="Margin" Value="0,0,0,10"/>
                                 <Setter Property="Padding" Value="0"/>

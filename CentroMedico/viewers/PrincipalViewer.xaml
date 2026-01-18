@@ -150,8 +150,9 @@
                     </Grid>
 
                     <ListView Grid.Row="1" x:Name="PatientsList" 
-          BorderThickness="0" Background="Transparent"
-          ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                              BorderThickness="0" Background="Transparent"
+                              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                              MouseDoubleClick="PatientsList_MouseDoubleClick">
 
                         <ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem">
@@ -187,9 +188,9 @@
 
                                     <Border Grid.Column="0" Width="50" Height="50" CornerRadius="25" Background="#DBEAFE" Margin="0,0,15,0">
                                         <TextBlock Text="{Binding name}" 
-                               MaxHeight="26" TextTrimming="CharacterEllipsis" Width="30"
-                               HorizontalAlignment="Center" VerticalAlignment="Center" 
-                               FontSize="18" FontWeight="Bold" Foreground="{StaticResource PrimaryColor}"/>
+                                                   MaxHeight="26" TextTrimming="CharacterEllipsis" Width="30"
+                                                   HorizontalAlignment="Center" VerticalAlignment="Center" 
+                                                   FontSize="18" FontWeight="Bold" Foreground="{StaticResource PrimaryColor}"/>
                                     </Border>
 
                                     <StackPanel Grid.Column="1" VerticalAlignment="Center">
@@ -205,7 +206,7 @@
                                     </StackPanel>
 
                                     <Path Grid.Column="2" Data="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z" 
-                      Fill="#9CA3AF" Height="15" Stretch="Uniform"/>
+                                          Fill="#9CA3AF" Height="15" Stretch="Uniform"/>
                                 </Grid>
                             </DataTemplate>
                         </ListView.ItemTemplate>

@@ -31,7 +31,6 @@ namespace CentroMedico.viewers
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-      
             Window parentWindow = Window.GetWindow(this);
 
             if (parentWindow != null)
@@ -126,8 +125,32 @@ namespace CentroMedico.viewers
         private void openRegisterModal(object sender, RoutedEventArgs e)
         {
             CreatePatientViewer modal = new CreatePatientViewer();
-            modal.PatientCreated += (s, args) => ChargeData();
             modal.ShowDialog();
+            ChargeData();
+        }
+
+        private void PatientsList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (PatientsList.SelectedItem is patientModel selectedPatient)
+            {
+                Window currentWindow = Window.GetWindow(this);
+
+                if (currentWindow != null)
+                {
+                    currentWindow.Hide();
+                }
+
+                DetailsViewer details = new DetailsViewer(selectedPatient);
+                details.ShowDialog(); 
+
+                if (currentWindow != null)
+                {
+                    currentWindow.Show();
+                    currentWindow.WindowState = WindowState.Maximized; 
+                }
+
+                ChargeData();
+            }
         }
     }
 }

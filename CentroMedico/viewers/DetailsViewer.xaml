@@ -1,0 +1,132 @@
+﻿<Window x:Class="CentroMedico.viewers.DetailsViewer"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Detalles del Paciente" Height="700" Width="1000"
+        WindowStartupLocation="CenterScreen" 
+        WindowState="Maximized" 
+        Background="#F3F4F6">
+
+    <Window.Resources>
+        <Style x:Key="BtnVerde" TargetType="Button">
+            <Setter Property="Background" Value="#10B981"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="15,8"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="6" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="BtnIcono" TargetType="Button">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#D1D5DB"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Width" Value="40"/>
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="Margin" Value="0,0,10,0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                CornerRadius="6">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Background="#2563EB" Height="60" Padding="20,0">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <Path Data="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" 
+                      Fill="White" Height="20" Stretch="Uniform" Margin="0,0,10,0"/>
+                <TextBlock Text="Consultorio Dra. Reynoso" Foreground="White" FontSize="18" FontWeight="Bold"/>
+            </StackPanel>
+        </Border>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="30">
+
+                <Button Click="BtnRegresar_Click" Background="Transparent" BorderThickness="0" HorizontalAlignment="Left" Cursor="Hand" Margin="0,0,0,15">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="←" Foreground="#2563EB" FontWeight="Bold" Margin="0,0,5,0"/>
+                        <TextBlock Text="Regresar a la lista de pacientes" Foreground="#2563EB"/>
+                    </StackPanel>
+                </Button>
+
+                <Border Background="White" CornerRadius="8" Padding="25">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="10" ShadowDepth="2" Opacity="0.05"/>
+                    </Border.Effect>
+
+                    <StackPanel>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0">
+                                <TextBlock x:Name="txtNombrePaciente" Text="Cargando Nombre..." FontSize="24" FontWeight="Bold" Foreground="#1F2937" Margin="0,0,0,10"/>
+
+                                <WrapPanel>
+                                    <TextBlock x:Name="txtDatosBasicos" Text="Edad: --   •   F. Nacim: --/--/--   •   Sangre: --" 
+                                               Foreground="#4B5563" FontSize="14" Margin="0,0,20,0"/>
+
+                                    <TextBlock x:Name="txtUltimosDatos" Text="Peso: -- kg   •   Altura: -- cm" 
+                                               Foreground="#2563EB" FontWeight="SemiBold" FontSize="14"/>
+                                </WrapPanel>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Top">
+                                <Button Style="{StaticResource BtnIcono}" Click="BtnEditar_Click" ToolTip="Editar">
+                                    <Path Data="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z" Fill="#6B7280" Height="16" Stretch="Uniform"/>
+                                </Button>
+                                <Button Style="{StaticResource BtnIcono}" Click="BtnEliminar_Click" ToolTip="Eliminar">
+                                    <Path Data="M9,3V4H4V6H5V19A2,2 0 0,0 7,21H17A2,2 0 0,0 19,19V6H20V4H15V3H9M7,6H17V19H7V6M9,8V17H11V8H9M13,8V17H15V8H13Z" Fill="#EF4444" Height="16" Stretch="Uniform"/>
+                                </Button>
+                                <Button Content="+ Agregar Nota de Evolución" Style="{StaticResource BtnVerde}"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <Separator Margin="0,20" Background="#E5E7EB"/>
+
+                        <TextBlock Text="Antecedentes de Importancia" FontWeight="Bold" Foreground="#374151" Margin="0,0,0,10"/>
+                        <Border Background="#FEFCE8" BorderBrush="#FEF08A" BorderThickness="1" CornerRadius="6" Padding="15">
+                            <TextBlock x:Name="txtAntecedentes" Text="Cargando..." Foreground="#854D0E" TextWrapping="Wrap"/>
+                        </Border>
+
+                        <Separator Margin="0,20" Background="#E5E7EB"/>
+
+                        <TextBlock Text="Historial de Consultas" FontWeight="Bold" Foreground="#374151" Margin="0,0,0,15"/>
+
+                        <ListView x:Name="listHistorial" BorderThickness="0" Background="Transparent">
+                        </ListView>
+
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Window>

@@ -5,6 +5,9 @@
     <Compile Update="viewers\CreatePatientViewer.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="viewers\DetailsViewer.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="viewers\principalViewer.xaml.cs">
       <SubType>Code</SubType>
     </Compile>

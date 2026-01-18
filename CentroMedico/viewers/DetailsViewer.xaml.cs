@@ -62,7 +62,9 @@ namespace CentroMedico.viewers
 
         private void BtnEditar_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Botón de Editar presionado (Diseño OK).");
+            UpdatePatientViewer updateModal = new UpdatePatientViewer(Patient);
+            updateModal.PatientUpdated += (s, args) => LoadVisualDesign();
+            updateModal.ShowDialog();
         }
 
         private void BtnEliminar_Click(object sender, RoutedEventArgs e)

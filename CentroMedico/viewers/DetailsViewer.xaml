@@ -197,10 +197,10 @@
                                         <StackPanel>
 
                                             <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
-                                                <TextBlock Text="Fecha: " FontWeight="Bold" FontSize="16" Foreground="#111827"/>
+                                                <TextBlock Text="Fecha de Consulta: " FontWeight="Bold" FontSize="16" Foreground="#111827"/>
                                                 <TextBlock Text="{Binding stringDate}" FontWeight="Bold" FontSize="16" Foreground="#111827"/>
                                                 <TextBlock Text=" - " FontSize="16" Foreground="#6B7280"/>
-                                                <TextBlock Text="{Binding type_consultation}" FontSize="16" Foreground="#6B7280"/>
+                                                <TextBlock Text="{Binding date, TargetNullValue='No registrado', FallbackValue='No registrado'}" FontSize="16" Foreground="#6B7280"/>
                                             </StackPanel>
 
                                             <Grid Margin="0,0,0,15">

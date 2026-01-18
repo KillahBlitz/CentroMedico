@@ -10,6 +10,7 @@ namespace CentroMedico.viewers
     {
         private patientModel Patient;
         List<consulationModel> consulationList = new List<consulationModel>();
+        List<historyModel> historyList = new List<historyModel>();
 
         public DetailsViewer(patientModel patient)
         {
@@ -26,7 +27,6 @@ namespace CentroMedico.viewers
             txtDatosBasicos.Text = $"Edad: {Patient.age} años, {Patient.age_mounth} meses   •   F. Nacim: {Patient.birthdate:dd/MM/yyyy}";
             UpdateWeightAndHeight();
             txtUltimosDatos.Text = $"Ultimo Peso: {Patient.weight} kg   •   Ultima Altura: {Patient.height} cm";
-            txtAntecedentes.Text = "Aquí aparecerá la historia clínica del paciente cuando se conecte la base de datos.";
 
             try
             {
@@ -38,12 +38,21 @@ namespace CentroMedico.viewers
                         .ToList();
                 }
 
-                listHistorial.ItemsSource = consulationList;
+                using (var db = new ConsultorioContext())
+                {
+                    historyList = db.Histories
+                        .Where(h => h.patient_id == Patient.id)
+                        .ToList();
+                }
+
+                    listHistorial.ItemsSource = consulationList;
+                    listHistories.ItemsSource = historyList;
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error al cargar datos: {ex.Message}");
             }
+
         }
 
         private void BtnRegresar_Click(object sender, RoutedEventArgs e)

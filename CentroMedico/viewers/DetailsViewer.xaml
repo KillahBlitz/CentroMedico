@@ -68,6 +68,7 @@
 
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
             <StackPanel Margin="40">
+                
                 <Button Click="BtnRegresar_Click" Background="Transparent" BorderThickness="0" HorizontalAlignment="Left" Cursor="Hand" Margin="0,0,0,20">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="←" Foreground="#2563EB" FontWeight="Bold" FontSize="16" Margin="0,0,8,0"/>
@@ -113,9 +114,64 @@
                         <Separator Margin="0,30" Background="#E5E7EB"/>
 
                         <TextBlock Text="Antecedentes de Importancia" FontWeight="Bold" FontSize="18" Foreground="#374151" Margin="0,0,0,15"/>
-                        <Border Background="#FEFCE8" BorderBrush="#FEF08A" BorderThickness="1" CornerRadius="8" Padding="20">
-                            <TextBlock x:Name="txtAntecedentes" Text="Cargando..." Foreground="#854D0E" FontSize="16" TextWrapping="Wrap"/>
-                        </Border>
+
+                        <ListView x:Name="listHistories" BorderThickness="0" Background="Transparent" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                            
+                            <ListView.Template>
+                                <ControlTemplate TargetType="ListView">
+                                    <Grid>
+                                        <ScrollViewer>
+                                            <ItemsPresenter />
+                                        </ScrollViewer>
+
+                                        <Border x:Name="NoDataBorder" Visibility="Collapsed" 
+                                                Background="#F3F4F6" BorderBrush="#E5E7EB" BorderThickness="1" 
+                                                CornerRadius="8" Padding="15" Margin="0,0,0,10">
+                                            <TextBlock Text="No hay antecedentes que mostrar." 
+                                                       Foreground="#6B7280" FontStyle="Italic" FontSize="15"
+                                                       HorizontalAlignment="Center"/>
+                                        </Border>
+                                    </Grid>
+                                    
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="HasItems" Value="False">
+                                            <Setter TargetName="NoDataBorder" Property="Visibility" Value="Visible"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </ListView.Template>
+
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="ListViewItem">
+                                                <ContentPresenter/>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="#EFF6FF" BorderBrush="#BFDBFE" BorderThickness="1" CornerRadius="8" Margin="0,0,0,10" Padding="15">
+                                        <StackPanel>
+                                            <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                                                <TextBlock Text="Tipo: " FontWeight="Bold" FontSize="15" Foreground="#1E40AF"/>
+                                                <TextBlock Text="{Binding type_history}" FontWeight="SemiBold" FontSize="15" Foreground="#1E3A8A"/>
+                                            </StackPanel>
+                                            
+                                            <TextBlock Text="{Binding history}" 
+                                                       FontSize="15" 
+                                                       Foreground="#374151" 
+                                                       TextWrapping="Wrap" 
+                                                       LineHeight="22"/>
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
 
                         <Separator Margin="0,30" Background="#E5E7EB"/>
 

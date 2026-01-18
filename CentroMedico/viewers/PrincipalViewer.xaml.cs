@@ -87,15 +87,34 @@ namespace CentroMedico.viewers
 
         private void UpdateYearsOld()
         {
-            int currentYear = DateTime.Now.Year;
+            DateTime currentDate = DateTime.Now;
             foreach (var patient in _allPatients)
             {
-                int birthYear = patient.birthdate.Year;
-                int age = currentYear - birthYear;
+                int age = currentDate.Year - patient.birthdate.Year;
+                
+                if (currentDate.Month < patient.birthdate.Month || 
+                    (currentDate.Month == patient.birthdate.Month && currentDate.Day < patient.birthdate.Day))
+                {
+                    age--;
+                }
+                
                 patient.age = age;
-                int birthMonth = patient.birthdate.Month;
-                int currentMonth = DateTime.Now.Month;
-                int monthsOld = birthMonth - currentMonth;
+                
+                int monthsOld = 0;
+                if (currentDate.Day >= patient.birthdate.Day)
+                {
+                    monthsOld = currentDate.Month - patient.birthdate.Month;
+                }
+                else
+                {
+                    monthsOld = currentDate.Month - patient.birthdate.Month - 1;
+                }
+                
+                if (monthsOld < 0)
+                {
+                    monthsOld += 12;
+                }
+                
                 patient.age_mounth = monthsOld;
                 using (var db = new ConsultorioContext())
                 {

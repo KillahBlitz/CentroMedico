@@ -1,39 +1,40 @@
-﻿using CentroMedico.models; // Necesario para recibir el modelo
+﻿using CentroMedico.models;
+using CentroMedico.Database;
 using System;
-using System.Collections.Generic; // Para listas
+using System.Collections.Generic;
 using System.Windows;
 
 namespace CentroMedico.viewers
 {
     public partial class DetailsViewer : Window
     {
-        private patientModel _currentPatient;
+        private patientModel Patient;
 
         public DetailsViewer(patientModel patient)
         {
             InitializeComponent();
-            _currentPatient = patient;
+            Patient = patient;
             LoadVisualDesign(); 
         }
 
         private void LoadVisualDesign()
         {
-            if (_currentPatient == null) return;
 
-            txtNombrePaciente.Text = _currentPatient.name;
+            txtNombrePaciente.Text = Patient.name;
 
-            txtDatosBasicos.Text = $"Edad: {_currentPatient.age} años   •   F. Nacim: {_currentPatient.birthdate:dd/MM/yyyy}";
-
-
-            txtUltimosDatos.Text = "Peso: 00.0 kg   •   Altura: 000 cm (Pendiente BD)";
+            txtDatosBasicos.Text = $"Edad: {Patient.age} años, {Patient.age_mounth} meses   •   F. Nacim: {Patient.birthdate:dd/MM/yyyy}";
+            UpdateWeightAndHeight();
+            txtUltimosDatos.Text = $"Ultimo Peso: {Patient.weight} kg   •   Ultima Altura: {Patient.height} cm";
             txtAntecedentes.Text = "Aquí aparecerá la historia clínica del paciente cuando se conecte la base de datos.";
 
-            List<string> listaPrueba = new List<string>
+            List<consulationModel> consulationList = ConsulationListObtains(Patient.id);
+            List<string> Details = new List<string>();
+            foreach (var consulation in consulationList)
             {
-                "Consulta 1 - (Datos de prueba para diseño)",
-                "Consulta 2 - (Datos de prueba para diseño)"
-            };
-            listHistorial.ItemsSource = listaPrueba;
+                string textData = $"Observaciones: {consulation.observations} \n";
+                Details.Add(textData);
+            }
+            listHistorial.ItemsSource = Details;
         }
 
         private void BtnRegresar_Click(object sender, RoutedEventArgs e)
@@ -49,6 +50,51 @@ namespace CentroMedico.viewers
         private void BtnEliminar_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("Botón de Eliminar presionado (Diseño OK).");
+        }
+
+        private void UpdateWeightAndHeight()
+        {
+            try
+            {
+                using (var db = new ConsultorioContext())
+                {
+                    var consultations = db.Consulations
+                        .Where(c => c.patient_id == Patient.id)
+                        .OrderByDescending(c => c.date)
+                        .FirstOrDefault();
+                    if (consultations != null)
+                    {
+                        Patient.weight = consultations.weight;
+                        Patient.height = consultations.height;
+                        var patientToUpdate = db.Patients.Find(Patient.id);
+                        db.SaveChanges();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al actualizar peso y altura: {ex.Message}");
+            }
+        }
+
+        private static List<consulationModel> ConsulationListObtains(int patientId)
+        {
+            try
+            {
+                using (var db = new ConsultorioContext())
+                {
+                    var consultations = db.Consulations
+                        .Where(c => c.patient_id == patientId)
+                        .OrderByDescending(c => c.date)
+                        .ToList();
+                    return consultations;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al obtener las consultas: {ex.Message}");
+                return new List<consulationModel>();
+            }
         }
     }
 }

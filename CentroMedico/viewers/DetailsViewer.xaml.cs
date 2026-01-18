@@ -67,7 +67,39 @@ namespace CentroMedico.viewers
 
         private void BtnEliminar_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Botón de Eliminar presionado (Diseño OK).");
+            MessageBoxResult result = MessageBox.Show(
+                "¿Seguro que deseas eliminar al paciente? Se eliminarán todas sus consultas y antecedentes.",
+                "Confirmar Eliminación",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                try
+                {
+                    using (var db = new ConsultorioContext())
+                    {
+                        var patientToDelete = db.Patients.Find(Patient.id);
+
+                        var relatedConsultations = db.Consulations.Where(c => c.patient_id == Patient.id);
+                        db.Consulations.RemoveRange(relatedConsultations);
+
+                        var relatedHistory = db.Histories.Where(h => h.patient_id == Patient.id);
+                        db.Histories.RemoveRange(relatedHistory);
+
+                        db.Patients.Remove(patientToDelete);
+
+                        db.SaveChanges();
+
+                        MessageBox.Show("Paciente eliminado correctamente.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
+                        this.Close();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error al eliminar datos: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
         }
 
         private void UpdateWeightAndHeight()

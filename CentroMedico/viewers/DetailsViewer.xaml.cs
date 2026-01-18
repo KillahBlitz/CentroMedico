@@ -9,6 +9,7 @@ namespace CentroMedico.viewers
     public partial class DetailsViewer : Window
     {
         private patientModel Patient;
+        List<consulationModel> consulationList = new List<consulationModel>();
 
         public DetailsViewer(patientModel patient)
         {
@@ -27,14 +28,22 @@ namespace CentroMedico.viewers
             txtUltimosDatos.Text = $"Ultimo Peso: {Patient.weight} kg   •   Ultima Altura: {Patient.height} cm";
             txtAntecedentes.Text = "Aquí aparecerá la historia clínica del paciente cuando se conecte la base de datos.";
 
-            List<consulationModel> consulationList = ConsulationListObtains(Patient.id);
-            List<string> Details = new List<string>();
-            foreach (var consulation in consulationList)
+            try
             {
-                string textData = $"Observaciones: {consulation.observations} \n";
-                Details.Add(textData);
+                using (var db = new ConsultorioContext())
+                {
+                    consulationList = db.Consulations
+                        .Where(c => c.patient_id == Patient.id)
+                        .OrderByDescending(c => c.date)
+                        .ToList();
+                }
+
+                listHistorial.ItemsSource = consulationList;
             }
-            listHistorial.ItemsSource = Details;
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al cargar datos: {ex.Message}");
+            }
         }
 
         private void BtnRegresar_Click(object sender, RoutedEventArgs e)

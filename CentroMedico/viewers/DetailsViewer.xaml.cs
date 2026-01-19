@@ -2,6 +2,7 @@
 using CentroMedico.Database;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 
 namespace CentroMedico.viewers
@@ -27,6 +28,11 @@ namespace CentroMedico.viewers
             txtDatosBasicos.Text = $"Edad: {Patient.age} años, {Patient.age_mounth} meses   •   F. Nacim: {Patient.birthdate:dd/MM/yyyy}";
             UpdateWeightAndHeight();
             txtUltimosDatos.Text = $"Ultimo Peso: {Patient.weight} kg   •   Ultima Altura: {Patient.height} cm";
+
+            // Cargar información adicional del paciente
+            txtTipoPaciente.Text = string.IsNullOrEmpty(Patient.type_patient) ? "General" : Patient.type_patient;
+            txtApgar.Text = string.IsNullOrEmpty(Patient.apgar) ? "Indefinido" : Patient.apgar;
+            txtTipoSangre.Text = string.IsNullOrEmpty(Patient.blood_type) ? "Por definir" : Patient.blood_type;
 
             try
             {
@@ -60,10 +66,39 @@ namespace CentroMedico.viewers
             this.Close();
         }
 
+        private void ReloadPatientData()
+        {
+            try
+            {
+                using (var db = new ConsultorioContext())
+                {
+                    var updatedPatient = db.Patients.Find(Patient.id);
+                    if (updatedPatient != null)
+                    {
+                        Patient.name = updatedPatient.name;
+                        Patient.type_patient = updatedPatient.type_patient;
+                        Patient.birthdate = updatedPatient.birthdate;
+                        Patient.blood_type = updatedPatient.blood_type;
+                        Patient.apgar = updatedPatient.apgar;
+                        Patient.age = updatedPatient.age;
+                        Patient.age_mounth = updatedPatient.age_mounth;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al recargar datos del paciente: {ex.Message}");
+            }
+        }
+
         private void BtnEditar_Click(object sender, RoutedEventArgs e)
         {
             UpdatePatientViewer updateModal = new UpdatePatientViewer(Patient);
-            updateModal.PatientUpdated += (s, args) => LoadVisualDesign();
+            updateModal.PatientUpdated += (s, args) =>
+            {
+                ReloadPatientData();
+                LoadVisualDesign();
+            };
             updateModal.ShowDialog();
         }
 

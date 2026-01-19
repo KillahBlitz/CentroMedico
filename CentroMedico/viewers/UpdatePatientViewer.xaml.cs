@@ -41,8 +41,8 @@ namespace CentroMedico.viewers
                 var apgarParts = currentPatient.apgar.Split(new[] { " de " }, StringSplitOptions.None);
                 if (apgarParts.Length == 2)
                 {
-                    apgarOneInput.Text = apgarParts[0];
-                    apgarFiveInput.Text = apgarParts[1];
+                    SetComboBoxValue(apgarOneInput, apgarParts[0]);
+                    SetComboBoxValue(apgarFiveInput, apgarParts[1]);
                 }
             }
         }
@@ -57,8 +57,8 @@ namespace CentroMedico.viewers
             string patientName = fullNameInput.Text;
             string typePatient = patientTypeInput.Text;
             string bloodType = bloodTypeInput.Text;
-            string apgarLeft = apgarOneInput.Text;
-            string apgarRight = apgarFiveInput.Text;
+            string apgarLeft = ((ComboBoxItem)apgarOneInput.SelectedItem)?.Content?.ToString() ?? "-";
+            string apgarRight = ((ComboBoxItem)apgarFiveInput.SelectedItem)?.Content?.ToString() ?? "-";
 
             DateTime? birthdate = dateOfBirthInput.SelectedDate.HasValue ? dateOfBirthInput.SelectedDate.Value : (DateTime?)null;
             typePatient = string.IsNullOrEmpty(typePatient) ? "General" : typePatient;
@@ -79,7 +79,6 @@ namespace CentroMedico.viewers
                             patientToUpdate.blood_type = bloodType;
                             patientToUpdate.birthdate = birthdate.Value;
                             patientToUpdate.apgar = $"{apgarLeft} de {apgarRight}";
-
                             db.SaveChanges();
                         }
                     }
@@ -113,6 +112,19 @@ namespace CentroMedico.viewers
         {
             fullNameInput.Text = fullNameInput.Text.ToUpper();
             fullNameInput.SelectionStart = fullNameInput.Text.Length;
+        }
+
+        private void SetComboBoxValue(ComboBox comboBox, string value)
+        {
+            foreach (ComboBoxItem item in comboBox.Items)
+            {
+                if (item.Content.ToString() == value)
+                {
+                    comboBox.SelectedItem = item;
+                    return;
+                }
+            }
+            comboBox.SelectedIndex = 0;
         }
     }
 }

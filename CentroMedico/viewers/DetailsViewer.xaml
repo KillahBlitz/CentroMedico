@@ -113,6 +113,31 @@
 
                         <Separator Margin="0,30" Background="#E5E7EB"/>
 
+                        <Border Background="#1E40AF" CornerRadius="8" Padding="20,15" Margin="0,0,0,20">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="TIPO DE PACIENTE" FontWeight="Bold" FontSize="12" Foreground="#BFDBFE" Margin="0,0,0,5"/>
+                                    <TextBlock x:Name="txtTipoPaciente" Text="--" FontWeight="Bold" FontSize="16" Foreground="White"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="1">
+                                    <TextBlock Text="APGAR" FontWeight="Bold" FontSize="12" Foreground="#BFDBFE" Margin="0,0,0,5"/>
+                                    <TextBlock x:Name="txtApgar" Text="--" FontWeight="Bold" FontSize="16" Foreground="White"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="2">
+                                    <TextBlock Text="TIPO DE SANGRE" FontWeight="Bold" FontSize="12" Foreground="#BFDBFE" Margin="0,0,0,5"/>
+                                    <TextBlock x:Name="txtTipoSangre" Text="--" FontWeight="Bold" FontSize="16" Foreground="White"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
                         <TextBlock Text="Antecedentes de Importancia" FontWeight="Bold" FontSize="18" Foreground="#374151" Margin="0,0,0,15"/>
 
                         <ListView x:Name="listHistories" BorderThickness="0" Background="Transparent" ScrollViewer.HorizontalScrollBarVisibility="Disabled">

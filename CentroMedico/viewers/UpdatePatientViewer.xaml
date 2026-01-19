@@ -82,9 +82,11 @@
 
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="20"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="1.5*"/>
+                        <ColumnDefinition Width="15"/>
+                        <ColumnDefinition Width="0.8*"/>
+                        <ColumnDefinition Width="15"/>
+                        <ColumnDefinition Width="1.3*"/>
                     </Grid.ColumnDefinitions>
 
                     <StackPanel Grid.Column="0">
@@ -97,6 +99,7 @@
                         <ComboBox x:Name="bloodTypeInput" Height="40" 
                                   BorderBrush="#D1D5DB" BorderThickness="1" Background="White"
                                   Padding="10,0" VerticalContentAlignment="Center">
+                            <ComboBoxItem Content="Por definir" IsSelected="True" Background="#E3F2FD" Foreground="#1565C0" FontWeight="Bold"/>
                             <ComboBoxItem Content="A+"/>
                             <ComboBoxItem Content="A-"/>
                             <ComboBoxItem Content="B+"/>
@@ -107,34 +110,65 @@
                             <ComboBoxItem Content="O-"/>
                         </ComboBox>
                     </StackPanel>
-                </Grid>
 
-                <Separator Opacity="0" Height="20"/>
+                    <StackPanel Grid.Column="4">
+                        <TextBlock Text="Apgar (1' / 5')" Style="{StaticResource LabelStyle}"/>
 
-                <TextBlock Text="Apgar (1' / 5')" Style="{StaticResource LabelStyle}"/>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
 
-                    <TextBox x:Name="apgarOneInput" 
-                             Grid.Column="0"
-                             Style="{StaticResource InputStyle}"
-                             Tag="1'"/>
+                            <ComboBox x:Name="apgarOneInput" Grid.Column="0" Height="40" 
+                                      VerticalContentAlignment="Center" Padding="5,0,0,0" SelectedIndex="0"
+                                      BorderBrush="#D1D5DB" BorderThickness="1" Background="White">
+                                <ComboBox.Resources>
+                                    <Style TargetType="Border">
+                                        <Setter Property="CornerRadius" Value="6"/>
+                                    </Style>
+                                </ComboBox.Resources>
+                                <ComboBoxItem Content="-" Background="#E3F2FD" Foreground="#1565C0" FontWeight="Bold"/>
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                                <ComboBoxItem Content="6"/>
+                                <ComboBoxItem Content="7"/>
+                                <ComboBoxItem Content="8"/>
+                                <ComboBoxItem Content="9"/>
+                                <ComboBoxItem Content="10"/>
+                            </ComboBox>
 
-                    <TextBlock Text="/" 
-                               Grid.Column="1" 
-                               FontSize="20" 
-                               Foreground="#9CA3AF" 
-                               VerticalAlignment="Center" 
-                               Margin="15,0"/>
+                            <TextBlock Text="de" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" 
+                                       Foreground="#9CA3AF" Margin="5,0" FontWeight="SemiBold"/>
 
-                    <TextBox x:Name="apgarFiveInput" 
-                             Grid.Column="2"
-                             Style="{StaticResource InputStyle}"
-                             Tag="5'"/>
+                            <ComboBox x:Name="apgarFiveInput" Grid.Column="2" Height="40" 
+                                      VerticalContentAlignment="Center" Padding="5,0,0,0" SelectedIndex="0"
+                                      BorderBrush="#D1D5DB" BorderThickness="1" Background="White">
+                                <ComboBox.Resources>
+                                    <Style TargetType="Border">
+                                        <Setter Property="CornerRadius" Value="6"/>
+                                    </Style>
+                                </ComboBox.Resources>
+                                <ComboBoxItem Content="-" Background="#E3F2FD" Foreground="#1565C0" FontWeight="Bold"/>
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                                <ComboBoxItem Content="6"/>
+                                <ComboBoxItem Content="7"/>
+                                <ComboBoxItem Content="8"/>
+                                <ComboBoxItem Content="9"/>
+                                <ComboBoxItem Content="10"/>
+                            </ComboBox>
+                        </Grid>
+                    </StackPanel>
                 </Grid>
 
             </StackPanel>

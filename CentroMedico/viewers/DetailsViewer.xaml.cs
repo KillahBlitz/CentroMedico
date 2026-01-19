@@ -17,15 +17,15 @@ namespace CentroMedico.viewers
         {
             InitializeComponent();
             Patient = patient;
-            LoadVisualDesign(); 
+            LoadVisualDesign();
         }
 
         private void LoadVisualDesign()
         {
-
             txtNombrePaciente.Text = Patient.name;
-
             txtDatosBasicos.Text = $"Edad: {Patient.age} años, {Patient.age_mounth} meses   •   F. Nacim: {Patient.birthdate:dd/MM/yyyy}";
+
+            // Actualizamos peso y altura basados en la última consulta
             UpdateWeightAndHeight();
             txtUltimosDatos.Text = $"Ultimo Peso: {Patient.weight} kg   •   Ultima Altura: {Patient.height} cm";
 
@@ -51,14 +51,13 @@ namespace CentroMedico.viewers
                         .ToList();
                 }
 
-                    listHistorial.ItemsSource = consulationList;
-                    listHistories.ItemsSource = historyList;
+                listHistorial.ItemsSource = consulationList;
+                listHistories.ItemsSource = historyList;
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error al cargar datos: {ex.Message}");
             }
-
         }
 
         private void BtnRegresar_Click(object sender, RoutedEventArgs e)
@@ -82,6 +81,9 @@ namespace CentroMedico.viewers
                         Patient.apgar = updatedPatient.apgar;
                         Patient.age = updatedPatient.age;
                         Patient.age_mounth = updatedPatient.age_mounth;
+                        // También actualizamos peso/altura en el objeto local si cambiaron
+                        Patient.weight = updatedPatient.weight;
+                        Patient.height = updatedPatient.height;
                     }
                 }
             }
@@ -149,12 +151,21 @@ namespace CentroMedico.viewers
                         .Where(c => c.patient_id == Patient.id)
                         .OrderByDescending(c => c.date)
                         .FirstOrDefault();
+
                     if (consultations != null)
                     {
+                        // Actualizamos el objeto local
                         Patient.weight = consultations.weight;
                         Patient.height = consultations.height;
+
+                        // Actualizamos la base de datos
                         var patientToUpdate = db.Patients.Find(Patient.id);
-                        db.SaveChanges();
+                        if (patientToUpdate != null)
+                        {
+                            patientToUpdate.weight = consultations.weight;
+                            patientToUpdate.height = consultations.height;
+                            db.SaveChanges();
+                        }
                     }
                 }
             }
@@ -182,6 +193,21 @@ namespace CentroMedico.viewers
                 MessageBox.Show($"Error al obtener las consultas: {ex.Message}");
                 return new List<consulationModel>();
             }
+        }
+
+
+        private void BtnNuevaNota_Click(object sender, RoutedEventArgs e)
+        {
+
+            CreateMedicalNote notaWindow = new CreateMedicalNote(Patient.id);
+
+            notaWindow.NoteSaved += (s, args) =>
+            {
+                LoadVisualDesign();
+                ReloadPatientData();
+            };
+
+            notaWindow.ShowDialog();
         }
     }
 }

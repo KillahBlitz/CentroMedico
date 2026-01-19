@@ -25,5 +25,6 @@ namespace CentroMedico.models
         public float respiratory_rate { get; set; }
         public string support_studies { get; set; }
         public string diagnosis_treatment { get; set; }
+     
     }
 }

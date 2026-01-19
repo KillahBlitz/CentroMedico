@@ -22,7 +22,7 @@ namespace CentroMedico.models
         public float height { get; set; }
         public int total_consulation { get; set; }
         public DateTime birthdate { get; set; }
-        public string apgar { get; set; } = "Indefinido";
+        public string apgar { get; set; } = "- de -";
         public string blood_type { get; set; }
         
         [NotMapped]

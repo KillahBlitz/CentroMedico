@@ -73,7 +73,7 @@
                     </StackPanel>
 
                     <StackPanel Grid.Column="2">
-                        <TextBlock Text="Tipo de Paciente" Style="{StaticResource LabelStyle}"/>
+                        <TextBlock Text="Tipo de Paciente (Opcional)" Style="{StaticResource LabelStyle}"/>
                         <TextBox x:Name="patientTypeInput" Style="{StaticResource InputStyle}"/>
                     </StackPanel>
                 </Grid>
@@ -202,15 +202,30 @@
 
                 <Separator Opacity="0" Height="20"/>
 
-                <TextBlock Text="Antecedentes de Importancia" Style="{StaticResource LabelStyle}"/>
-                <TextBox x:Name="historyInput" Height="84" TextWrapping="Wrap" VerticalContentAlignment="Top" Padding="10"
-                         BorderBrush="#D1D5DB" BorderThickness="1">
-                    <TextBox.Resources>
-                        <Style TargetType="Border">
-                            <Setter Property="CornerRadius" Value="6"/>
-                        </Style>
-                    </TextBox.Resources>
-                </TextBox>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="Antecedentes de Importancia (Opcional)" Style="{StaticResource LabelStyle}"/>
+                        <TextBox x:Name="historyInput" Height="84" TextWrapping="Wrap" VerticalContentAlignment="Top" Padding="10"
+                                 BorderBrush="#D1D5DB" BorderThickness="1">
+                            <TextBox.Resources>
+                                <Style TargetType="Border">
+                                    <Setter Property="CornerRadius" Value="6"/>
+                                </Style>
+                            </TextBox.Resources>
+                        </TextBox>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="2">
+                        <TextBlock Text="Tipo de Antecedente (Opcional)" Style="{StaticResource LabelStyle}"/>
+                        <TextBox x:Name="typeHistoryInput" Style="{StaticResource InputStyle}"/>
+                    </StackPanel>
+                </Grid>
 
             </StackPanel>
 

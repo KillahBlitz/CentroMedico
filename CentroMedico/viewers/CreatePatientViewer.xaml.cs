@@ -24,6 +24,7 @@ namespace CentroMedico.viewers
         public CreatePatientViewer()
         {
             InitializeComponent();
+            dobInput.DisplayDateEnd = DateTime.Now;
         }
 
         private void OnlyNumbers_PreviewTextInput(object sender, TextCompositionEventArgs e)
@@ -53,12 +54,14 @@ namespace CentroMedico.viewers
             string weight = weightInput.Text;
             string height = heightInput.Text;
             string history = historyInput.Text;
+            string typeHistory = typeHistoryInput.Text;
             string apgar_left = apgar1Input.Text;
             string apgar_right = apgar5Input.Text;
             string BloodType = bloodTypeInput.Text;
 
             DateTime? birthdate = dobInput.SelectedDate.HasValue ? dobInput.SelectedDate.Value : (DateTime?)null;
             typePatient = string.IsNullOrEmpty(typePatient) ? "General" : typePatient;
+            typeHistory = string.IsNullOrEmpty(typeHistory) ? "Indefinido" : typeHistory;
 
             bool validation = ChampsValidation(patientName, weight, height, birthdate);
 
@@ -86,6 +89,7 @@ namespace CentroMedico.viewers
                             patient_id = newPatient.id,
                             history = history,
                             name = newPatient.name,
+                            type_history = typeHistory
                         };
                         db.Histories.Add(newHistory);
                         db.SaveChanges();

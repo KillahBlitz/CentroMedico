@@ -87,7 +87,7 @@
 
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
             <StackPanel Margin="40">
-                
+
                 <Button Click="BtnRegresar_Click" Background="Transparent" BorderThickness="0" HorizontalAlignment="Left" Cursor="Hand" Margin="0,0,0,20">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="←" Foreground="#2563EB" FontWeight="Bold" FontSize="16" Margin="0,0,8,0"/>
@@ -141,12 +141,17 @@
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
 
-                                <StackPanel Grid.Column="0">
+                                <StackPanel Grid.Column="0" Margin="0,0,20,0">
                                     <TextBlock Text="TIPO DE PACIENTE" FontWeight="Bold" FontSize="12" Foreground="#BFDBFE" Margin="0,0,0,5"/>
-                                    <TextBlock x:Name="txtTipoPaciente" Text="--" FontWeight="Bold" FontSize="16" Foreground="White"/>
+                                    <TextBlock x:Name="txtTipoPaciente" 
+                                               Text="--" 
+                                               FontWeight="Bold" 
+                                               FontSize="16" 
+                                               Foreground="White"
+                                               TextWrapping="Wrap"/>
                                 </StackPanel>
 
-                                <StackPanel Grid.Column="1">
+                                <StackPanel Grid.Column="1" HorizontalAlignment="Left" Margin="100,0,0,0">
                                     <TextBlock Text="APGAR" FontWeight="Bold" FontSize="12" Foreground="#BFDBFE" Margin="0,0,0,5"/>
                                     <TextBlock x:Name="txtApgar" Text="--" FontWeight="Bold" FontSize="16" Foreground="White"/>
                                 </StackPanel>
@@ -161,7 +166,7 @@
                         <TextBlock Text="Antecedentes de Importancia" FontWeight="Bold" FontSize="18" Foreground="#374151" Margin="0,0,0,15"/>
 
                         <ListView x:Name="listHistories" BorderThickness="0" Background="Transparent" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                            
+
                             <ListView.Template>
                                 <ControlTemplate TargetType="ListView">
                                     <Grid>
@@ -177,7 +182,7 @@
                                                        HorizontalAlignment="Center"/>
                                         </Border>
                                     </Grid>
-                                    
+
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="HasItems" Value="False">
                                             <Setter TargetName="NoDataBorder" Property="Visibility" Value="Visible"/>
@@ -206,7 +211,7 @@
                                                 <TextBlock Text="Tipo: " FontWeight="Bold" FontSize="15" Foreground="#1E40AF"/>
                                                 <TextBlock Text="{Binding type_history}" FontWeight="SemiBold" FontSize="15" Foreground="#1E3A8A"/>
                                             </StackPanel>
-                                            
+
                                             <TextBlock Text="{Binding history}" 
                                                        FontSize="15" 
                                                        Foreground="#374151" 

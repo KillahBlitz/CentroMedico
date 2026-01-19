@@ -27,6 +27,8 @@ namespace CentroMedico.viewers
             InitializeComponent();
             currentPatient = patient;
             LoadPatientData();
+            dateOfBirthInput.DisplayDateEnd = DateTime.Now;
+            
         }
 
         private void LoadPatientData()

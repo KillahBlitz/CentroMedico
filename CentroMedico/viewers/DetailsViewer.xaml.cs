@@ -256,5 +256,17 @@ namespace CentroMedico.viewers
                 }
             }
         }
+        private void BtnAgregarAntecedente_Click(object sender, RoutedEventArgs e)
+        {
+            CreateHistoryViewer historyWindow = new CreateHistoryViewer(Patient.id);
+
+            historyWindow.HistorySaved += (s, args) =>
+            {
+                LoadVisualDesign();
+            };
+
+        
+            historyWindow.ShowDialog();
+        }
     }
 }

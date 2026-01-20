@@ -49,6 +49,19 @@ Proporcionar una herramienta robusta y fácil de usar para profesionales de la s
 | **Búsqueda Inteligente** | Sistema de búsqueda por nombre del paciente | ✅ |
 | **Eliminación Segura** | Eliminación con confirmación de pacientes y sus registros relacionados | ✅ |
 | **Vista Detallada** | Panel completo con toda la información clínica del paciente | ✅ |
+| **Historial Médico** | Registro de antecedentes con validación de campos obligatorios | ✅ |
+
+### 🏥 Gestión de Consultas Médicas
+
+| Característica | Descripción | Estado |
+|:--------------|:-----------|:-----:|
+| **Crear Nota Médica** | Formulario completo para registro de consultas médicas | ✅ |
+| **Editar Nota Médica** | Modificación de consultas existentes con pre-carga de datos | ✅ |
+| **Signos Vitales** | Registro completo de peso, altura, temperatura, FC, FR, PC | ✅ |
+| **Nota de Evolución** | Campo obligatorio para observaciones médicas | ✅ |
+| **Estudios de Apoyo** | Campo opcional con valor por defecto "Ninguno" | ✅ |
+| **Diagnóstico y Tratamiento** | Campo opcional con valor por defecto "Pendiente" | ✅ |
+| **Validación Completa** | Validación de todos los campos obligatorios con `IsNullOrWhiteSpace` | ✅ |
 
 ### 📋 Información del Paciente
 
@@ -73,8 +86,13 @@ Proporcionar una herramienta robusta y fácil de usar para profesionales de la s
 - **Actualización Automática**: Las vistas se actualizan automáticamente después de crear o editar pacientes usando eventos
 - **Conversión Automática**: Los nombres se convierten a mayúsculas automáticamente
 - **Validación de Entrada**: Solo números en campos numéricos, validación de formatos
+- **Validación Avanzada**: Uso de `IsNullOrWhiteSpace` para detectar campos vacíos o con solo espacios
+- **Valores por Defecto Inteligentes**: Asignación automática de valores por defecto en campos opcionales
 - **Cálculo de Edad**: Cálculo automático de edad en años y meses desde la fecha de nacimiento
 - **Historial Ordenado**: Las consultas se muestran en orden cronológico descendente
+- **Historial Condicional**: Los antecedentes solo se guardan si ambos campos (descripción y tipo) están completos
+- **Modo Edición**: Sistema dual de creación/edición en notas médicas con detección automática
+- **Pre-carga de Datos**: Carga automática de información existente en modo edición
 
 ### 💾 Base de Datos
 
@@ -479,15 +497,28 @@ updateModal.PatientUpdated += (s, args) => {
 - Peso en kg (obligatorio, solo números)
 - Altura en cm (obligatorio, solo números)
 - Fecha de nacimiento (obligatoria)
+- Historial: Solo se guarda si ambos campos (descripción y tipo) están completos usando `IsNullOrWhiteSpace`
 
 **En UpdatePatientViewer:**
 - Nombre completo (obligatorio)
 - Fecha de nacimiento (obligatoria)
 
+**En CreateMedicalNote:**
+- Fecha de consulta (obligatoria)
+- Peso, altura, temperatura (obligatorios, solo números)
+- Frecuencia cardíaca y respiratoria (obligatorias, solo números)
+- Perímetro cefálico (obligatorio, solo números)
+- Nota de evolución (obligatoria, con `IsNullOrWhiteSpace`)
+- Estudios de apoyo (opcional, valor por defecto: "Ninguno")
+- Diagnóstico y tratamiento (opcional, valor por defecto: "Pendiente")
+- Tipo de consulta (opcional, valor por defecto: "General")
+
 **Validación en Tiempo Real:**
 - Conversión automática a mayúsculas en campos de nombre
 - Restricción de caracteres en campos numéricos
 - Prevención de entrada de letras en campos de peso/altura
+- Detección de campos con solo espacios en blanco (`IsNullOrWhiteSpace`)
+- Asignación automática de valores por defecto en campos opcionales vacíos
 
 ### 💡 Características Técnicas Destacadas
 
@@ -534,11 +565,13 @@ Mensajes de error informativos con `MessageBox.Show()` para feedback al usuario.
 - [ ] Módulo de generación de reportes PDF
 - [ ] Sistema de respaldo automático de base de datos
 - [ ] Gráficas de crecimiento para pacientes pediátricos
-- [ ] Funcionalidad "Agregar Nota de Evolución"
 - [ ] Sistema de recordatorios de citas
 - [ ] Exportación de datos a Excel
 - [ ] Impresión de recetas médicas
 - [ ] Dashboard con estadísticas del consultorio
+- [ ] Visualización gráfica del historial de signos vitales
+- [ ] Filtros avanzados para búsqueda de consultas
+- [ ] Sistema de respaldo automático antes de eliminar registros
 
 ### 🐛 Reporte de Errores
 
@@ -557,6 +590,12 @@ Para más información sobre la estructura de la base de datos, consulta:
 <div align="center">
 
 ### 💙 Desarrollado con amor para el Consultorio Reynoso
+
+#### 👨‍💻 Creado por
+
+**KillahBlitz** • **KapauCastle**
+
+---
 
 **¿Preguntas o Sugerencias?**  
 No dudes en contactar al equipo de desarrollo
@@ -581,6 +620,7 @@ No dudes en contactar al equipo de desarrollo
 | 🗄️ **Base de Datos** | SQLite con Entity Framework Core 8.0.11 |
 | 🎨 **UI Framework** | Windows Presentation Foundation (WPF) |
 | 💻 **Lenguaje** | C# 12 |
+| 👨‍💻 **Desarrolladores** | KillahBlitz & KapauCastle |
 
 ### 📈 Estado del Proyecto
 
@@ -592,7 +632,10 @@ No dudes en contactar al equipo de desarrollo
 | Vista de Detalles | ✅ Completo | 100% |
 | Búsqueda de Pacientes | ✅ Completo | 100% |
 | Base de Datos | ✅ Funcional | 100% |
-| Gestión de Consultas | 🚧 En desarrollo | 50% |
+| Gestión de Consultas | ✅ Completo | 100% |
+| Notas Médicas (Crear/Editar) | ✅ Completo | 100% |
+| Validaciones Avanzadas | ✅ Completo | 100% |
+| Historial de Antecedentes | ✅ Completo | 100% |
 | Reportes | ⏳ Pendiente | 0% |
 
 ### 🎯 Hitos Completados
@@ -609,6 +652,13 @@ No dudes en contactar al equipo de desarrollo
 - ✅ Eliminación de pacientes con confirmación
 - ✅ Panel informativo con datos médicos clave
 - ✅ Sistema de historial de consultas (visualización)
+- ✅ Módulo completo de notas médicas (crear/editar)
+- ✅ Validación avanzada con `IsNullOrWhiteSpace`
+- ✅ Sistema de valores por defecto en campos opcionales
+- ✅ Validación condicional de historial de antecedentes
+- ✅ Registro completo de signos vitales en consultas
+- ✅ Modo dual de creación/edición en consultas médicas
+- ✅ Pre-carga automática de datos en modo edición
 
 ---
 

@@ -147,12 +147,12 @@
                     </StackPanel>
 
                     <StackPanel Margin="0,0,0,15">
-                        <TextBlock Text="Estudios de apoyo / Complementarios" Style="{StaticResource LabelStyle}"/>
+                        <TextBlock Text="Estudios de apoyo / Complementarios (Opcional)" Style="{StaticResource LabelStyle}"/>
                         <TextBox x:Name="studiesInput" Style="{StaticResource TextAreaStyle}" Height="60"/>
                     </StackPanel>
 
                     <StackPanel Margin="0,0,0,15">
-                        <TextBlock Text="Diagnóstico y tratamiento" Style="{StaticResource LabelStyle}"/>
+                        <TextBlock Text="Diagnóstico y tratamiento (Opcional)" Style="{StaticResource LabelStyle}"/>
                         <TextBox x:Name="diagnosisInput" Style="{StaticResource TextAreaStyle}" Height="80"/>
                     </StackPanel>
                 </StackPanel>

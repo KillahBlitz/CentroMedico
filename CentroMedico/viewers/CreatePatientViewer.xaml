@@ -4,7 +4,8 @@
         Title="New Patient Viewer" Height="630" Width="700"
         WindowStartupLocation="CenterScreen" 
         WindowStyle="None" ResizeMode="NoResize"
-        AllowsTransparency="True" Background="Transparent">
+        AllowsTransparency="True" Background="Transparent"
+        >
 
     <Window.Resources>
         <Style TargetType="TextBlock" x:Key="LabelStyle">

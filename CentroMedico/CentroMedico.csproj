@@ -6,9 +6,11 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>icono.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="assets\icono.ico" />
     <None Remove="assets\logo_bebe.png" />
   </ItemGroup>
 
@@ -24,6 +26,11 @@
     <Content Include="assets\logo_bebe.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="icono.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="assets\icono.ico" />
   </ItemGroup>
 
 </Project>

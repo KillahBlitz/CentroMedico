@@ -4,7 +4,8 @@
         Title="Nueva Nota de Evolución" Height="600" Width="800"
         WindowStartupLocation="CenterScreen" 
         WindowStyle="None" ResizeMode="NoResize"
-        AllowsTransparency="True" Background="Transparent">
+        AllowsTransparency="True" Background="Transparent"
+        Icon="/assets/logo_bebe.png">
 
     <Window.Resources>
         <Style TargetType="TextBlock" x:Key="LabelStyle">

@@ -7,7 +7,8 @@
         Title="Detalles del Paciente" Height="700" Width="1000"
         WindowStartupLocation="CenterScreen" 
         WindowState="Maximized" 
-        Background="#F3F4F6">
+        Background="#F3F4F6"
+        >
 
     <Window.Resources>
         <Style x:Key="BtnVerde" TargetType="Button">

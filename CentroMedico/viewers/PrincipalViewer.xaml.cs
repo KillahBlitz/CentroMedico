@@ -1,0 +1,175 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using CentroMedico.Database;
+using CentroMedico.models;
+using Microsoft.EntityFrameworkCore;
+
+namespace CentroMedico.viewers
+{
+    public partial class principalViewer : UserControl
+    {
+        private List<patientModel> _allPatients;
+
+        public principalViewer()
+        {
+            InitializeComponent();
+            ConsultorioContext.PrepareDatBase();
+            ChargeData();
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            Window parentWindow = Window.GetWindow(this);
+
+            if (parentWindow != null)
+            {
+                parentWindow.WindowState = WindowState.Maximized;
+            }
+        }
+
+        private void ChargeData()
+        {
+            try
+            {
+                using (var db = new ConsultorioContext())
+                {
+                    _allPatients = db.Patients.ToList();
+                }
+                _allPatients = OrderByName(_allPatients);
+                foreach (var patient in _allPatients)
+                {
+                    patient.ultimateDate = SelectUltimateConsulation(patient.id);
+                }
+                PatientsList.ItemsSource = _allPatients;
+                UpdateYearsOld();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al cargar datos: {ex.Message}");
+            }
+        }
+
+        private void searchUser(object sender, TextChangedEventArgs e)
+        {
+            if (_allPatients == null) return;
+
+            string searchText = txtBuscar.Text.ToLower();
+
+            if (string.IsNullOrEmpty(searchText))
+            {
+                PatientsList.ItemsSource = _allPatients;
+                return;
+            }
+
+            var filteredPatients = _allPatients
+                .Where(p => p.name.ToLower().Contains(searchText) || p.id.ToString().Contains(searchText))
+                .ToList();
+            PatientsList.ItemsSource = filteredPatients;
+        }
+
+        public static List<patientModel> OrderByName(List<patientModel> patients)
+        {
+            patients.Sort((x, y) => string.Compare(x.name, y.name));
+            return patients;
+        }
+
+        private void UpdateYearsOld()
+        {
+            DateTime currentDate = DateTime.Now;
+            foreach (var patient in _allPatients)
+            {
+                int age = currentDate.Year - patient.birthdate.Year;
+                
+                if (currentDate.Month < patient.birthdate.Month || 
+                    (currentDate.Month == patient.birthdate.Month && currentDate.Day < patient.birthdate.Day))
+                {
+                    age--;
+                }
+                
+                patient.age = age;
+                
+                int monthsOld = 0;
+                if (currentDate.Day >= patient.birthdate.Day)
+                {
+                    monthsOld = currentDate.Month - patient.birthdate.Month;
+                }
+                else
+                {
+                    monthsOld = currentDate.Month - patient.birthdate.Month - 1;
+                }
+                
+                if (monthsOld < 0)
+                {
+                    monthsOld += 12;
+                }
+                
+                patient.age_mounth = monthsOld;
+                using (var db = new ConsultorioContext())
+                {
+                    var patientToUpdate = db.Patients.Find(patient.id);
+                    if (patientToUpdate != null)
+                    {
+                        patientToUpdate.age = patient.age;
+                        patientToUpdate.age_mounth = patient.age_mounth;
+                        db.SaveChanges();
+                    }
+                }
+            }
+        }
+
+        private DateOnly SelectUltimateConsulation(int patientId)
+        {
+            using (var db = new ConsultorioContext())
+            {
+                var ultimateConsulation = db.Consulations
+                                            .Where(c => c.patient_id == patientId)
+                                            .OrderByDescending(c => c.date)
+                                            .FirstOrDefault();
+                return ultimateConsulation != null ? DateOnly.FromDateTime(ultimateConsulation.date) : DateOnly.FromDateTime(DateTime.Now);
+            }
+        }
+
+        private void openRegisterModal(object sender, RoutedEventArgs e)
+        {
+            CreatePatientViewer modal = new CreatePatientViewer();
+            modal.ShowDialog();
+            ChargeData();
+        }
+
+        private void PatientsList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (PatientsList.SelectedItem is patientModel selectedPatient)
+            {
+                Window currentWindow = Window.GetWindow(this);
+
+                if (currentWindow != null)
+                {
+                    currentWindow.Hide();
+                }
+
+                DetailsViewer details = new DetailsViewer(selectedPatient);
+                details.ShowDialog(); 
+
+                if (currentWindow != null)
+                {
+                    currentWindow.Show();
+                    currentWindow.WindowState = WindowState.Maximized; 
+                }
+
+                ChargeData();
+            }
+        }
+    }
+}

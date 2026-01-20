@@ -27,7 +27,7 @@ namespace CentroMedico.Database
                 optionsBuilder.UseSqlite($"Data Source={RutaDestino}");
         }
 
-        public static void PrepararBaseDeDatos()
+        public static void PrepareDatBase()
         {
             if (File.Exists(RutaDestino))
             {

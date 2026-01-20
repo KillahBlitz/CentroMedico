@@ -1,4 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup />
+  <PropertyGroup>
+    <_LastSelectedProfileId>C:\Users\fach7\OneDrive\Documentos\TRABAJO\CONSULTORIO REYNOSO\CentroMedico\CentroMedico\Properties\PublishProfiles\ClickOnceProfile.pubxml</_LastSelectedProfileId>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Update="viewers\CreateMedicalNote.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="viewers\CreatePatientViewer.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="viewers\DetailsViewer.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="viewers\principalViewer.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="viewers\UpdatePatientViewer.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
 </Project>

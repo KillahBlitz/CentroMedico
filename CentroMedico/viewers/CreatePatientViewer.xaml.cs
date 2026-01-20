@@ -61,7 +61,6 @@ namespace CentroMedico.viewers
 
             DateTime? birthdate = dobInput.SelectedDate.HasValue ? dobInput.SelectedDate.Value : (DateTime?)null;
             typePatient = string.IsNullOrEmpty(typePatient) ? "General" : typePatient;
-            typeHistory = string.IsNullOrEmpty(typeHistory) ? "Indefinido" : typeHistory;
 
             bool validation = ChampsValidation(patientName, weight, height, birthdate);
 
@@ -82,7 +81,7 @@ namespace CentroMedico.viewers
                     db.Patients.Add(newPatient);
                     db.SaveChanges();
 
-                    if (!string.IsNullOrEmpty(history))
+                    if (!string.IsNullOrWhiteSpace(history) && !string.IsNullOrWhiteSpace(typeHistory))
                     {
                         var newHistory = new historyModel
                         {

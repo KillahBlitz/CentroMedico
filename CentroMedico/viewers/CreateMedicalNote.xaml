@@ -89,7 +89,7 @@
                             <DatePicker x:Name="dateInput" Height="40" VerticalContentAlignment="Center" />
                         </StackPanel>
                         <StackPanel Grid.Column="2">
-                            <TextBlock Text="Tipo de Consulta" Style="{StaticResource LabelStyle}"/>
+                            <TextBlock Text="Tipo de Consulta (opcional)" Style="{StaticResource LabelStyle}"/>
                             <TextBox x:Name="consultationTypeInput" Style="{StaticResource InputStyle}"/>
                         </StackPanel>
                     </Grid>

@@ -9,12 +9,14 @@ namespace CentroMedico.viewers
     public partial class CreateHistoryViewer : Window
     {
         private int _patientId;
+        private string _name;
         public event EventHandler HistorySaved;
 
-        public CreateHistoryViewer(int patientId)
+        public CreateHistoryViewer(int patientId, string name)
         {
             InitializeComponent();
             _patientId = patientId;
+            _name = name;
         }
 
         private void CloseModal(object sender, RoutedEventArgs e)
@@ -46,6 +48,7 @@ namespace CentroMedico.viewers
                     var newHistory = new historyModel
                     {
                         patient_id = _patientId,
+                        name = _name,
                         type_history = type,
                         history = description
                     };

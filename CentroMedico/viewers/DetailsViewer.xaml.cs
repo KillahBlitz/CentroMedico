@@ -256,7 +256,7 @@ namespace CentroMedico.viewers
 
         private void BtnAgregarAntecedente_Click(object sender, RoutedEventArgs e)
         {
-            CreateHistoryViewer historyWindow = new CreateHistoryViewer(Patient.id);
+            CreateHistoryViewer historyWindow = new CreateHistoryViewer(Patient.id, Patient.name);
 
             historyWindow.HistorySaved += (s, args) =>
             {

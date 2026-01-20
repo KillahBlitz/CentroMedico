@@ -25,11 +25,9 @@ namespace CentroMedico.viewers
             txtNombrePaciente.Text = Patient.name;
             txtDatosBasicos.Text = $"Edad: {Patient.age} años, {Patient.age_mounth} meses   •   F. Nacim: {Patient.birthdate:dd/MM/yyyy}";
 
-            // Actualizamos peso y altura basados en la última consulta
             UpdateWeightAndHeight();
             txtUltimosDatos.Text = $"Ultimo Peso: {Patient.weight} kg   •   Ultima Altura: {Patient.height} cm";
 
-            // Cargar información adicional del paciente
             txtTipoPaciente.Text = string.IsNullOrEmpty(Patient.type_patient) ? "General" : Patient.type_patient;
             txtApgar.Text = string.IsNullOrEmpty(Patient.apgar) ? "Indefinido" : Patient.apgar;
             txtTipoSangre.Text = string.IsNullOrEmpty(Patient.blood_type) ? "Por definir" : Patient.blood_type;
@@ -81,7 +79,6 @@ namespace CentroMedico.viewers
                         Patient.apgar = updatedPatient.apgar;
                         Patient.age = updatedPatient.age;
                         Patient.age_mounth = updatedPatient.age_mounth;
-                        // También actualizamos peso/altura en el objeto local si cambiaron
                         Patient.weight = updatedPatient.weight;
                         Patient.height = updatedPatient.height;
                     }
@@ -154,11 +151,9 @@ namespace CentroMedico.viewers
 
                     if (consultations != null)
                     {
-                        // Actualizamos el objeto local
                         Patient.weight = consultations.weight;
                         Patient.height = consultations.height;
 
-                        // Actualizamos la base de datos
                         var patientToUpdate = db.Patients.Find(Patient.id);
                         if (patientToUpdate != null)
                         {
@@ -208,6 +203,58 @@ namespace CentroMedico.viewers
             };
 
             notaWindow.ShowDialog();
+        }
+
+        private void btnEditConsultation_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is System.Windows.Controls.Button button && button.Tag is consulationModel consultation)
+            {
+                CreateMedicalNote editWindow = new CreateMedicalNote(Patient.id, consultation);
+
+                editWindow.NoteSaved += (s, args) =>
+                {
+                    LoadVisualDesign();
+                    ReloadPatientData();
+                };
+
+                editWindow.ShowDialog();
+            }
+        }
+
+        private void btnDeleteConsultation_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is System.Windows.Controls.Button button && button.Tag is consulationModel consultation)
+            {
+                MessageBoxResult result = MessageBox.Show(
+                    $"¿Seguro que deseas eliminar la consulta del {consultation.date:dd/MM/yyyy}?",
+                    "Confirmar Eliminación",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Warning);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    try
+                    {
+                        using (var db = new ConsultorioContext())
+                        {
+                            var consultationToDelete = db.Consulations.Find(consultation.id);
+                            if (consultationToDelete != null)
+                            {
+                                db.Consulations.Remove(consultationToDelete);
+                                db.SaveChanges();
+
+                                MessageBox.Show("Consulta eliminada correctamente.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
+                                LoadVisualDesign();
+                                ReloadPatientData();
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error al eliminar consulta: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+            }
         }
     }
 }

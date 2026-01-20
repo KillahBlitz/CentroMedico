@@ -11,16 +11,50 @@ namespace CentroMedico.viewers
     public partial class CreateMedicalNote : Window
     {
         private int _patientId;
+        private consulationModel _existingConsultation;
+        private bool _isEditMode;
         public event EventHandler NoteSaved;
 
         public CreateMedicalNote(int patientId)
         {
             InitializeComponent();
             _patientId = patientId;
+            _isEditMode = false;
 
-            // Configurar fecha por defecto a Hoy y bloquear fechas futuras
             dateInput.SelectedDate = DateTime.Now;
             dateInput.DisplayDateEnd = DateTime.Now;
+        }
+
+        public CreateMedicalNote(int patientId, consulationModel consultation)
+        {
+            InitializeComponent();
+            _patientId = patientId;
+            _existingConsultation = consultation;
+            _isEditMode = true;
+
+            dateInput.DisplayDateEnd = DateTime.Now;
+
+            LoadConsultationData();
+        }
+
+        private void LoadConsultationData()
+        {
+            if (_existingConsultation != null)
+            {
+                dateInput.SelectedDate = _existingConsultation.date;
+                consultationTypeInput.Text = _existingConsultation.type_consultation;
+
+                weightInput.Text = _existingConsultation.weight.ToString();
+                heightInput.Text = _existingConsultation.height.ToString();
+                tempInput.Text = _existingConsultation.temperature.ToString();
+                fcInput.Text = _existingConsultation.heart_rate.ToString();
+                frInput.Text = _existingConsultation.respiratory_rate.ToString();
+                pcInput.Text = _existingConsultation.pc.ToString();
+
+                evolutionNoteInput.Text = _existingConsultation.observations;
+                studiesInput.Text = _existingConsultation.support_studies;
+                diagnosisInput.Text = _existingConsultation.diagnosis_treatment;
+            }
         }
 
         private void CloseModal(object sender, RoutedEventArgs e)
@@ -30,7 +64,6 @@ namespace CentroMedico.viewers
 
         private void SaveNote(object sender, RoutedEventArgs e)
         {
-            // Validaciones básicas: Que al menos haya nota de evolución y diagnóstico
             if (string.IsNullOrEmpty(evolutionNoteInput.Text) || string.IsNullOrEmpty(diagnosisInput.Text))
             {
                 MessageBox.Show("Por favor ingresa al menos la Nota de Evolución y el Diagnóstico.");
@@ -41,32 +74,48 @@ namespace CentroMedico.viewers
             {
                 using (var db = new ConsultorioContext())
                 {
-                    var newConsultation = new consulationModel
+                    consulationModel consultation;
+
+                    if (_isEditMode && _existingConsultation != null)
                     {
-                        patient_id = _patientId,
-                        date = dateInput.SelectedDate.Value,
-                        type_consultation = consultationTypeInput.Text,
+                        consultation = db.Consulations.Find(_existingConsultation.id);
+                        if (consultation == null)
+                        {
+                            MessageBox.Show("No se encontró la consulta a editar.");
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        consultation = new consulationModel
+                        {
+                            patient_id = _patientId
+                        };
+                    }
 
-                        // Signos vitales con validación segura (0 si está vacío)
-                        weight = float.Parse(string.IsNullOrEmpty(weightInput.Text) ? "0" : weightInput.Text),
-                        height = float.Parse(string.IsNullOrEmpty(heightInput.Text) ? "0" : heightInput.Text),
-                        temperature = float.Parse(string.IsNullOrEmpty(tempInput.Text) ? "0" : tempInput.Text),
-                        heart_rate = float.Parse(string.IsNullOrEmpty(fcInput.Text) ? "0" : fcInput.Text),
-                        respiratory_rate = float.Parse(string.IsNullOrEmpty(frInput.Text) ? "0" : frInput.Text),
-                        pc = float.Parse(string.IsNullOrEmpty(pcInput.Text) ? "0" : pcInput.Text),
+                    consultation.date = dateInput.SelectedDate.Value;
+                    consultation.type_consultation = consultationTypeInput.Text;
 
-                        // --- AQUÍ ESTÁ EL CAMBIO IMPORTANTE ---
-                        // Guardamos cada dato en su columna correspondiente
-                        observations = evolutionNoteInput.Text,       // Nota de evolución -> observations
-                        support_studies = studiesInput.Text,          // Estudios -> support_studies
-                        diagnosis_treatment = diagnosisInput.Text     // Diagnóstico -> diagnosis_treatment
-                    };
+                    consultation.weight = float.Parse(string.IsNullOrEmpty(weightInput.Text) ? "0" : weightInput.Text);
+                    consultation.height = float.Parse(string.IsNullOrEmpty(heightInput.Text) ? "0" : heightInput.Text);
+                    consultation.temperature = float.Parse(string.IsNullOrEmpty(tempInput.Text) ? "0" : tempInput.Text);
+                    consultation.heart_rate = float.Parse(string.IsNullOrEmpty(fcInput.Text) ? "0" : fcInput.Text);
+                    consultation.respiratory_rate = float.Parse(string.IsNullOrEmpty(frInput.Text) ? "0" : frInput.Text);
+                    consultation.pc = float.Parse(string.IsNullOrEmpty(pcInput.Text) ? "0" : pcInput.Text);
 
-                    db.Consulations.Add(newConsultation);
+                    consultation.observations = evolutionNoteInput.Text;
+                    consultation.support_studies = studiesInput.Text;
+                    consultation.diagnosis_treatment = diagnosisInput.Text;
+
+                    if (!_isEditMode)
+                    {
+                        db.Consulations.Add(consultation);
+                    }
+
                     db.SaveChanges();
                 }
 
-                MessageBox.Show("Nota guardada correctamente.");
+                MessageBox.Show(_isEditMode ? "Consulta actualizada correctamente." : "Nota guardada correctamente.");
                 NoteSaved?.Invoke(this, EventArgs.Empty);
                 this.Close();
             }

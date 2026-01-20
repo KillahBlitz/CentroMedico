@@ -165,14 +165,14 @@
 
                         <TextBlock Text="Antecedentes de Importancia" FontWeight="Bold" FontSize="18" Foreground="#374151" Margin="0,0,0,15"/>
 
-                        <ListView x:Name="listHistories" BorderThickness="0" Background="Transparent" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                        <ListView x:Name="listHistories" BorderThickness="0" Background="Transparent" 
+                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                  ScrollViewer.VerticalScrollBarVisibility="Disabled">
 
                             <ListView.Template>
                                 <ControlTemplate TargetType="ListView">
                                     <Grid>
-                                        <ScrollViewer>
-                                            <ItemsPresenter />
-                                        </ScrollViewer>
+                                        <ItemsPresenter />
 
                                         <Border x:Name="NoDataBorder" Visibility="Collapsed" 
                                                 Background="#F3F4F6" BorderBrush="#E5E7EB" BorderThickness="1" 
@@ -227,7 +227,15 @@
 
                         <TextBlock Text="Historial de Consultas" FontWeight="Bold" FontSize="18" Foreground="#374151" Margin="0,0,0,20"/>
 
-                        <ListView x:Name="listHistorial" BorderThickness="0" Background="Transparent" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                        <ListView x:Name="listHistorial" BorderThickness="0" Background="Transparent" 
+                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                  ScrollViewer.VerticalScrollBarVisibility="Disabled">
+
+                            <ListView.Template>
+                                <ControlTemplate TargetType="ListView">
+                                    <ItemsPresenter />
+                                </ControlTemplate>
+                            </ListView.Template>
 
                             <ListView.ItemContainerStyle>
                                 <Style TargetType="ListViewItem">
@@ -244,14 +252,74 @@
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <Border Background="#F9FAFB" BorderBrush="#E5E7EB" BorderThickness="1" CornerRadius="8" Margin="0,0,0,20" Padding="20">
-                                        <StackPanel>
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="*"/>
+                                            </Grid.RowDefinitions>
 
-                                            <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
-                                                <TextBlock Text="Fecha de Consulta: " FontWeight="Bold" FontSize="16" Foreground="#111827"/>
-                                                <TextBlock Text="{Binding date, StringFormat='{}{0:dd/MM/yyyy}'}" FontWeight="Bold" FontSize="16" Foreground="#111827"/>
-                                                <TextBlock Text=" - " FontSize="16" Foreground="#6B7280"/>
-                                                <TextBlock Text="{Binding type_consultation, TargetNullValue='No registrado', FallbackValue='No registrado'}" FontSize="16" Foreground="#6B7280"/>
-                                            </StackPanel>
+                                            <Grid Grid.Row="0" Margin="0,0,0,15">
+                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                                    <TextBlock Text="Fecha de Consulta: " FontWeight="Bold" FontSize="16" Foreground="#111827"/>
+                                                    <TextBlock Text="{Binding date, StringFormat='{}{0:dd/MM/yyyy}'}" FontWeight="Bold" FontSize="16" Foreground="#111827"/>
+                                                    <TextBlock Text=" - " FontSize="16" Foreground="#6B7280"/>
+                                                    <TextBlock Text="{Binding type_consultation, TargetNullValue='No registrado', FallbackValue='No registrado'}" FontSize="16" Foreground="#6B7280"/>
+                                                </StackPanel>
+
+                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                                    <Button Click="btnEditConsultation_Click"
+                                                            Tag="{Binding}"
+                                                            Background="White" 
+                                                            BorderBrush="#D1D5DB" 
+                                                            BorderThickness="1" 
+                                                            Width="35" 
+                                                            Height="35" 
+                                                            Margin="0,0,8,0" 
+                                                            Cursor="Hand" 
+                                                            ToolTip="Edit consultation">
+                                                        <Button.Template>
+                                                            <ControlTemplate TargetType="Button">
+                                                                <Border Background="{TemplateBinding Background}" 
+                                                                        BorderBrush="{TemplateBinding BorderBrush}" 
+                                                                        BorderThickness="{TemplateBinding BorderThickness}" 
+                                                                        CornerRadius="6">
+                                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                                </Border>
+                                                            </ControlTemplate>
+                                                        </Button.Template>
+                                                        <Path Data="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z" 
+                                                              Fill="#6B7280" 
+                                                              Height="16" 
+                                                              Stretch="Uniform"/>
+                                                    </Button>
+                                                    <Button Click="btnDeleteConsultation_Click"
+                                                            Tag="{Binding}"
+                                                            Background="White" 
+                                                            BorderBrush="#D1D5DB" 
+                                                            BorderThickness="1" 
+                                                            Width="35" 
+                                                            Height="35" 
+                                                            Cursor="Hand" 
+                                                            ToolTip="Delete consultation">
+                                                        <Button.Template>
+                                                            <ControlTemplate TargetType="Button">
+                                                                <Border Background="{TemplateBinding Background}" 
+                                                                        BorderBrush="{TemplateBinding BorderBrush}" 
+                                                                        BorderThickness="{TemplateBinding BorderThickness}" 
+                                                                        CornerRadius="6">
+                                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                                </Border>
+                                                            </ControlTemplate>
+                                                        </Button.Template>
+                                                        <Path Data="M9,3V4H4V6H5V19A2,2 0 0,0 7,21H17A2,2 0 0,0 19,19V6H20V4H15V3H9M7,6H17V19H7V6M9,8V17H11V8H9M13,8V17H15V8H13Z" 
+                                                              Fill="#EF4444" 
+                                                              Height="16" 
+                                                              Stretch="Uniform"/>
+                                                    </Button>
+                                                </StackPanel>
+                                            </Grid>
+
+                                            <StackPanel Grid.Row="1">
 
                                             <Grid Margin="0,0,0,15">
                                                 <Grid.ColumnDefinitions>
@@ -306,7 +374,8 @@
                                                 <TextBlock Text="{Binding support_studies}" FontSize="15" TextWrapping="Wrap" Foreground="#374151"/>
                                             </StackPanel>
 
-                                        </StackPanel>
+                                            </StackPanel>
+                                        </Grid>
                                     </Border>
                                 </DataTemplate>
                             </ListView.ItemTemplate>

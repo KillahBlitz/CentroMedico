@@ -111,10 +111,10 @@
                                 <TextBlock x:Name="txtNombrePaciente" Text="Cargando Nombre..." FontSize="28" FontWeight="Bold" Foreground="#1F2937" Margin="0,0,0,15"/>
 
                                 <WrapPanel>
-                                    <TextBlock x:Name="txtDatosBasicos" Text="Edad: --   •   F. Nacim: --/--/--   •   Gpo y Rh: --" 
+                                    <TextBlock x:Name="txtDatosBasicos" Text="Edad: --    •    F. Nacim: --/--/--    •    Gpo y Rh: --" 
                                                Foreground="#4B5563" FontSize="16" Margin="0,0,25,0"/>
 
-                                    <TextBlock x:Name="txtUltimosDatos" Text="Peso: -- kg   •   Altura: -- cm" 
+                                    <TextBlock x:Name="txtUltimosDatos" Text="Peso: -- kg    •    Altura: -- cm" 
                                                Foreground="#2563EB" FontWeight="Bold" FontSize="16"/>
                                 </WrapPanel>
                             </StackPanel>
@@ -173,7 +173,6 @@
                                 <ControlTemplate TargetType="ListView">
                                     <Grid>
                                         <ItemsPresenter />
-
                                         <Border x:Name="NoDataBorder" Visibility="Collapsed" 
                                                 Background="#F3F4F6" BorderBrush="#E5E7EB" BorderThickness="1" 
                                                 CornerRadius="8" Padding="15" Margin="0,0,0,10">
@@ -182,7 +181,6 @@
                                                        HorizontalAlignment="Center"/>
                                         </Border>
                                     </Grid>
-
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="HasItems" Value="False">
                                             <Setter TargetName="NoDataBorder" Property="Visibility" Value="Visible"/>
@@ -206,18 +204,52 @@
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <Border Background="#EFF6FF" BorderBrush="#BFDBFE" BorderThickness="1" CornerRadius="8" Margin="0,0,0,10" Padding="15">
-                                        <StackPanel>
-                                            <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                                                <TextBlock Text="Tipo: " FontWeight="Bold" FontSize="15" Foreground="#1E40AF"/>
-                                                <TextBlock Text="{Binding type_history}" FontWeight="SemiBold" FontSize="15" Foreground="#1E3A8A"/>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <StackPanel Grid.Column="0" Margin="0,0,15,0">
+                                                <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                                                    <TextBlock Text="Tipo: " FontWeight="Bold" FontSize="15" Foreground="#1E40AF"/>
+                                                    <TextBlock Text="{Binding type_history}" FontWeight="SemiBold" FontSize="15" Foreground="#1E3A8A"/>
+                                                </StackPanel>
+
+                                                <TextBlock Text="{Binding history}" 
+                                                           FontSize="15" 
+                                                           Foreground="#374151" 
+                                                           TextWrapping="Wrap" 
+                                                           LineHeight="22"/>
                                             </StackPanel>
 
-                                            <TextBlock Text="{Binding history}" 
-                                                       FontSize="15" 
-                                                       Foreground="#374151" 
-                                                       TextWrapping="Wrap" 
-                                                       LineHeight="22"/>
-                                        </StackPanel>
+                                            <Button Grid.Column="1" 
+                                                    Click="btnDeleteHistory_Click"
+                                                    Tag="{Binding}"
+                                                    Background="White" 
+                                                    BorderBrush="#D1D5DB" 
+                                                    BorderThickness="1" 
+                                                    Width="35" 
+                                                    Height="35" 
+                                                    VerticalAlignment="Center"
+                                                    Cursor="Hand" 
+                                                    ToolTip="Eliminar antecedente">
+                                                <Button.Template>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <Border Background="{TemplateBinding Background}" 
+                                                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                                                CornerRadius="6">
+                                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Button.Template>
+                                                <Path Data="M9,3V4H4V6H5V19A2,2 0 0,0 7,21H17A2,2 0 0,0 19,19V6H20V4H15V3H9M7,6H17V19H7V6M9,8V17H11V8H9M13,8V17H15V8H13Z" 
+                                                      Fill="#EF4444" 
+                                                      Height="16" 
+                                                      Stretch="Uniform"/>
+                                            </Button>
+                                        </Grid>
                                     </Border>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
@@ -321,58 +353,58 @@
 
                                             <StackPanel Grid.Row="1">
 
-                                            <Grid Margin="0,0,0,15">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="*"/>
-                                                    <ColumnDefinition Width="*"/>
-                                                    <ColumnDefinition Width="*"/>
-                                                    <ColumnDefinition Width="*"/>
-                                                    <ColumnDefinition Width="*"/>
-                                                    <ColumnDefinition Width="*"/>
-                                                </Grid.ColumnDefinitions>
+                                                <Grid Margin="0,0,0,15">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                    </Grid.ColumnDefinitions>
 
-                                                <StackPanel Grid.Column="0" Orientation="Horizontal">
-                                                    <TextBlock Text="Peso: " FontWeight="SemiBold" FontSize="15" Foreground="#374151"/>
-                                                    <TextBlock Text="{Binding weight}" FontSize="15" Foreground="#374151"/>
-                                                    <TextBlock Text=" kg" FontSize="15" Foreground="#374151"/>
-                                                </StackPanel>
-                                                <StackPanel Grid.Column="1" Orientation="Horizontal">
-                                                    <TextBlock Text="Talla: " FontWeight="SemiBold" FontSize="15" Foreground="#374151"/>
-                                                    <TextBlock Text="{Binding height}" FontSize="15" Foreground="#374151"/>
-                                                    <TextBlock Text=" cm" FontSize="15" Foreground="#374151"/>
-                                                </StackPanel>
-                                                <StackPanel Grid.Column="2" Orientation="Horizontal">
-                                                    <TextBlock Text="P.C.: " FontWeight="SemiBold" FontSize="15" Foreground="#374151"/>
-                                                    <TextBlock Text="{Binding pc}" FontSize="15" Foreground="#374151"/>
-                                                    <TextBlock Text=" cm" FontSize="15" Foreground="#374151"/>
-                                                </StackPanel>
-                                                <StackPanel Grid.Column="3" Orientation="Horizontal">
-                                                    <TextBlock Text="T°: " FontWeight="SemiBold" FontSize="15" Foreground="#374151"/>
-                                                    <TextBlock Text="{Binding temperature}" FontSize="15" Foreground="#374151"/>
-                                                    <TextBlock Text=" °C" FontSize="15" Foreground="#374151"/>
-                                                </StackPanel>
-                                                <StackPanel Grid.Column="4" Orientation="Horizontal">
-                                                    <TextBlock Text="FC: " FontWeight="SemiBold" FontSize="15" Foreground="#374151"/>
-                                                    <TextBlock Text="{Binding heart_rate}" FontSize="15" Foreground="#374151"/>
-                                                    <TextBlock Text=" lpm" FontSize="15" Foreground="#374151"/>
-                                                </StackPanel>
-                                                <StackPanel Grid.Column="5" Orientation="Horizontal">
-                                                    <TextBlock Text="FR: " FontWeight="SemiBold" FontSize="15" Foreground="#374151"/>
-                                                    <TextBlock Text="{Binding respiratory_rate}" FontSize="15" Foreground="#374151"/>
-                                                    <TextBlock Text=" rpm" FontSize="15" Foreground="#374151"/>
-                                                </StackPanel>
-                                            </Grid>
+                                                    <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                                        <TextBlock Text="Peso: " FontWeight="SemiBold" FontSize="15" Foreground="#374151"/>
+                                                        <TextBlock Text="{Binding weight}" FontSize="15" Foreground="#374151"/>
+                                                        <TextBlock Text=" kg" FontSize="15" Foreground="#374151"/>
+                                                    </StackPanel>
+                                                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                                        <TextBlock Text="Talla: " FontWeight="SemiBold" FontSize="15" Foreground="#374151"/>
+                                                        <TextBlock Text="{Binding height}" FontSize="15" Foreground="#374151"/>
+                                                        <TextBlock Text=" cm" FontSize="15" Foreground="#374151"/>
+                                                    </StackPanel>
+                                                    <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                                        <TextBlock Text="P.C.: " FontWeight="SemiBold" FontSize="15" Foreground="#374151"/>
+                                                        <TextBlock Text="{Binding pc}" FontSize="15" Foreground="#374151"/>
+                                                        <TextBlock Text=" cm" FontSize="15" Foreground="#374151"/>
+                                                    </StackPanel>
+                                                    <StackPanel Grid.Column="3" Orientation="Horizontal">
+                                                        <TextBlock Text="T°: " FontWeight="SemiBold" FontSize="15" Foreground="#374151"/>
+                                                        <TextBlock Text="{Binding temperature}" FontSize="15" Foreground="#374151"/>
+                                                        <TextBlock Text=" °C" FontSize="15" Foreground="#374151"/>
+                                                    </StackPanel>
+                                                    <StackPanel Grid.Column="4" Orientation="Horizontal">
+                                                        <TextBlock Text="FC: " FontWeight="SemiBold" FontSize="15" Foreground="#374151"/>
+                                                        <TextBlock Text="{Binding heart_rate}" FontSize="15" Foreground="#374151"/>
+                                                        <TextBlock Text=" lpm" FontSize="15" Foreground="#374151"/>
+                                                    </StackPanel>
+                                                    <StackPanel Grid.Column="5" Orientation="Horizontal">
+                                                        <TextBlock Text="FR: " FontWeight="SemiBold" FontSize="15" Foreground="#374151"/>
+                                                        <TextBlock Text="{Binding respiratory_rate}" FontSize="15" Foreground="#374151"/>
+                                                        <TextBlock Text=" rpm" FontSize="15" Foreground="#374151"/>
+                                                    </StackPanel>
+                                                </Grid>
 
-                                            <StackPanel>
-                                                <TextBlock Text="Diagnóstico y Tratamiento:" FontWeight="Bold" FontSize="15" Foreground="#1E40AF" Margin="0,5,0,2"/>
-                                                <TextBlock Text="{Binding diagnosis_treatment}" FontSize="15" TextWrapping="Wrap" Foreground="#374151" Margin="0,0,0,10"/>
+                                                <StackPanel>
+                                                    <TextBlock Text="Diagnóstico y Tratamiento:" FontWeight="Bold" FontSize="15" Foreground="#1E40AF" Margin="0,5,0,2"/>
+                                                    <TextBlock Text="{Binding diagnosis_treatment}" FontSize="15" TextWrapping="Wrap" Foreground="#374151" Margin="0,0,0,10"/>
 
-                                                <TextBlock Text="Nota de Evolución:" FontWeight="Bold" FontSize="15" Foreground="#1E40AF" Margin="0,5,0,2"/>
-                                                <TextBlock Text="{Binding observations}" FontSize="15" TextWrapping="Wrap" Foreground="#374151" Margin="0,0,0,10"/>
+                                                    <TextBlock Text="Nota de Evolución:" FontWeight="Bold" FontSize="15" Foreground="#1E40AF" Margin="0,5,0,2"/>
+                                                    <TextBlock Text="{Binding observations}" FontSize="15" TextWrapping="Wrap" Foreground="#374151" Margin="0,0,0,10"/>
 
-                                                <TextBlock Text="Estudios de Apoyo:" FontWeight="Bold" FontSize="15" Foreground="#1E40AF" Margin="0,5,0,2"/>
-                                                <TextBlock Text="{Binding support_studies}" FontSize="15" TextWrapping="Wrap" Foreground="#374151"/>
-                                            </StackPanel>
+                                                    <TextBlock Text="Estudios de Apoyo:" FontWeight="Bold" FontSize="15" Foreground="#1E40AF" Margin="0,5,0,2"/>
+                                                    <TextBlock Text="{Binding support_studies}" FontSize="15" TextWrapping="Wrap" Foreground="#374151"/>
+                                                </StackPanel>
 
                                             </StackPanel>
                                         </Grid>

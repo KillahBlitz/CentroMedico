@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace CentroMedico.viewers
 {
@@ -23,10 +24,10 @@ namespace CentroMedico.viewers
         private void LoadVisualDesign()
         {
             txtNombrePaciente.Text = Patient.name;
-            txtDatosBasicos.Text = $"Edad: {Patient.age} años, {Patient.age_mounth} meses   •   F. Nacim: {Patient.birthdate:dd/MM/yyyy}";
+            txtDatosBasicos.Text = $"Edad: {Patient.age} años, {Patient.age_mounth} meses    •    F. Nacim: {Patient.birthdate:dd/MM/yyyy}";
 
             UpdateWeightAndHeight();
-            txtUltimosDatos.Text = $"Ultimo Peso: {Patient.weight} kg   •   Ultima Altura: {Patient.height} cm";
+            txtUltimosDatos.Text = $"Ultimo Peso: {Patient.weight} kg    •    Ultima Altura: {Patient.height} cm";
 
             txtTipoPaciente.Text = string.IsNullOrEmpty(Patient.type_patient) ? "General" : Patient.type_patient;
             txtApgar.Text = string.IsNullOrEmpty(Patient.apgar) ? "Indefinido" : Patient.apgar;
@@ -40,17 +41,14 @@ namespace CentroMedico.viewers
                         .Where(c => c.patient_id == Patient.id)
                         .OrderByDescending(c => c.date)
                         .ToList();
-                }
 
-                using (var db = new ConsultorioContext())
-                {
                     historyList = db.Histories
                         .Where(h => h.patient_id == Patient.id)
                         .ToList();
                 }
 
                 listHistorial.ItemsSource = consulationList;
-                listHistories.ItemsSource = historyList;
+                listHistories.ItemsSource = historyList; 
             }
             catch (Exception ex)
             {
@@ -123,12 +121,13 @@ namespace CentroMedico.viewers
                         var relatedHistory = db.Histories.Where(h => h.patient_id == Patient.id);
                         db.Histories.RemoveRange(relatedHistory);
 
-                        db.Patients.Remove(patientToDelete);
-
-                        db.SaveChanges();
-
-                        MessageBox.Show("Paciente eliminado correctamente.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
-                        this.Close();
+                        if (patientToDelete != null)
+                        {
+                            db.Patients.Remove(patientToDelete);
+                            db.SaveChanges();
+                            MessageBox.Show("Paciente eliminado correctamente.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
+                            this.Close();
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -176,11 +175,10 @@ namespace CentroMedico.viewers
             {
                 using (var db = new ConsultorioContext())
                 {
-                    var consultations = db.Consulations
+                    return db.Consulations
                         .Where(c => c.patient_id == patientId)
                         .OrderByDescending(c => c.date)
                         .ToList();
-                    return consultations;
                 }
             }
             catch (Exception ex)
@@ -190,10 +188,8 @@ namespace CentroMedico.viewers
             }
         }
 
-
         private void BtnNuevaNota_Click(object sender, RoutedEventArgs e)
         {
-
             CreateMedicalNote notaWindow = new CreateMedicalNote(Patient.id);
 
             notaWindow.NoteSaved += (s, args) =>
@@ -207,7 +203,7 @@ namespace CentroMedico.viewers
 
         private void btnEditConsultation_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is System.Windows.Controls.Button button && button.Tag is consulationModel consultation)
+            if (sender is Button button && button.Tag is consulationModel consultation)
             {
                 CreateMedicalNote editWindow = new CreateMedicalNote(Patient.id, consultation);
 
@@ -223,7 +219,7 @@ namespace CentroMedico.viewers
 
         private void btnDeleteConsultation_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is System.Windows.Controls.Button button && button.Tag is consulationModel consultation)
+            if (sender is Button button && button.Tag is consulationModel consultation)
             {
                 MessageBoxResult result = MessageBox.Show(
                     $"¿Seguro que deseas eliminar la consulta del {consultation.date:dd/MM/yyyy}?",
@@ -244,6 +240,7 @@ namespace CentroMedico.viewers
                                 db.SaveChanges();
 
                                 MessageBox.Show("Consulta eliminada correctamente.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
+
                                 LoadVisualDesign();
                                 ReloadPatientData();
                             }
@@ -256,6 +253,7 @@ namespace CentroMedico.viewers
                 }
             }
         }
+
         private void BtnAgregarAntecedente_Click(object sender, RoutedEventArgs e)
         {
             CreateHistoryViewer historyWindow = new CreateHistoryViewer(Patient.id);
@@ -265,8 +263,48 @@ namespace CentroMedico.viewers
                 LoadVisualDesign();
             };
 
-        
             historyWindow.ShowDialog();
+        }
+
+        private void btnDeleteHistory_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button && button.Tag is historyModel historyItem)
+            {
+                MessageBoxResult result = MessageBox.Show(
+                    $"¿Seguro que deseas eliminar el antecedente de tipo '{historyItem.type_history}'?",
+                    "Confirmar Eliminación",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Warning);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    try
+                    {
+                        using (var db = new ConsultorioContext())
+                        {
+                            var historyToDelete = db.Histories.Find(historyItem.id);
+
+                            if (historyToDelete != null)
+                            {
+                                db.Histories.Remove(historyToDelete);
+                                db.SaveChanges();
+
+                                MessageBox.Show("Antecedente eliminado correctamente.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                                LoadVisualDesign();
+                            }
+                            else
+                            {
+                                MessageBox.Show("No se encontró el antecedente en la base de datos.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error al eliminar antecedente: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+            }
         }
     }
 }
